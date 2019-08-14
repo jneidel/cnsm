@@ -1,0 +1,26 @@
+{
+  "name": "cnsm",
+  "version": "0.0.0",
+  "description": "",
+  "repository": "jneidel/cnsm",
+  "license": "GLPv3",
+  "author": {
+    "name": "Jonathan Neidel",
+    "email": "npm@jneidel.com",
+    "url": "https://jneidel.com"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "log-update": "^3.2.0",
+    "make-dir": "^3.0.0",
+    "meow": "^5.0.0",
+    "readline-promise": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.1"
+  }
+}
