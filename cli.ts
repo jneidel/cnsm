@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 import meow from "meow";
 import { dataTypes } from "./lib/Media";
 import view from "./lib/view";
