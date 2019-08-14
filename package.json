@@ -12,7 +12,8 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "post-install": "tsc"
+    "post-install": "tsc",
+    "link": "tsc && sudo npm link"
   },
   "bin": {
     "cnsm": "build/cli.js"

@@ -6,8 +6,7 @@
 git clone git@github.com:jneidel/cnsm.git
 cd cnsm
 npm i
-npm run build
-sudo npm link
+npm run link
 ```
 
 ## Usage
