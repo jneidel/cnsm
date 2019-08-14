@@ -21,11 +21,6 @@ export default async function view() {
   const translateSelection = selected =>
     ( selected - 1 ) * ( currentView * 10 + 1 );
 
-  // ctrl+c, ctrl+d, etc
-  process.on( "exit", () => {
-    fs.writeConfig( data );
-  } );
-
   // input loop
   while ( true ) {
     const answer = await rlp.questionAsync( `${chalk.blue( "$" )} ` );
@@ -50,9 +45,11 @@ export default async function view() {
         currentView = currentView === 0 ? 0 : currentView - 1;
         draw();
         break;
+      case "exit":
+        process.exit();
       case "q":
       case "wq":
-      case "exit":
+        fs.writeConfig( data );
         process.exit();
       case "w":
       case "write":
@@ -72,7 +69,8 @@ export default async function view() {
                  example: movie search for the title on imdb.com in $BROWSER
 
   w,  write  - write changes
-  q,  exit   - write changes and exit` );
+  q,  wq     - write changes and quit
+      exit   - exit without writing` );
         break;
       case "f":
       case "filter":
