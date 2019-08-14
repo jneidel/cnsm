@@ -24,8 +24,7 @@ export default async function view() {
   // input loop
   while ( true ) {
     const answer = await rlp.questionAsync( `${chalk.blue( "$" )} ` );
-    const command = answer.split( " " )[0];
-    let selected = answer.split( " " )[1];
+    let [ command, selected, secondParam ] = [ ...answer.split( " " ) ]
     selected = selected === "0" ? 10 : Number( selected );
     let media;
 
@@ -60,7 +59,7 @@ export default async function view() {
   ls, list   - list entries
   n,  next   - view next 10 entries
   p,  prev   - view previous 10 entries
-  f,  filter - filter by type (example: $ f C; $ filter manga)
+  f,  filter - filter by type (usage: $ f C; $ filter manga)
       reset  - reset filter
   r,  reload - reload data file
 
@@ -68,6 +67,8 @@ export default async function view() {
                  example: manga searches for the title on mangalife.us in $BROWSER
   a,  alt    - open with alternative handler (same principle as open)
                  example: movie search for the title on imdb.com in $BROWSER
+
+  g,  prog   - set progress for selected (usage: $ prog 3 65)
 
   w,  write  - write changes
   q,  wq     - write changes and quit
@@ -107,6 +108,12 @@ export default async function view() {
         draw()
         console.log( "Reloaded data file" )
         break;
+      case "g":
+      case "prog":
+        selected = translateSelection( selected );
+        data[selected].prog = secondParam
+        console.log( `Setting progress for ${selected + 1} to ${secondParam}` )
+        break
     }
   }
 }

@@ -7,6 +7,7 @@ interface MediaData {
   type: "article" | "series" | "video" | "movie" | "manga" | "comic" | "anime" | "file";
   desc?: string;
   nf?: boolean;
+  prog: number;
 }
 
 export default class Media {
@@ -14,7 +15,7 @@ export default class Media {
   type;
   desc = "";
   nf = false;
-  length = 0;
+  prog = 0;
 
   constructor( data: MediaData ) {
     this.name = data.name;
@@ -22,6 +23,7 @@ export default class Media {
 
     this.nf = data.nf ? data.nf : this.nf;
     this.desc = data.desc ? data.desc : this.desc;
+    this.prog = data.prog ? data.prog : this.prog;
   }
 
   // @ts-ignore
@@ -70,7 +72,7 @@ export default class Media {
 
   toString( index = 0 ) {
     index = index === 9 ? 0 : index + 1;
-    return `${chalk.yellow( String( index ) )}: ${this.translateType()} - ${this.evalDescriptor()}`;
+    return `${chalk.yellow( String( index ) )}: ${this.translateType()} - ${this.evalDescriptor()}${this.prog ? chalk.cyan( ` ${this.prog}%` ) : ""}`;
   }
 
   private openInBrowser( url ) {
