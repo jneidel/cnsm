@@ -98,11 +98,13 @@ export default async function view() {
       case "delete":
         selected = translateSelection( selected );
         data.splice( selected, 1 );
+        draw()
         console.log( `Removed ${selected + 1}.` );
         break;
       case "r":
       case "reload":
         data = await fs.readConfig();
+        draw()
         console.log( "Reloaded data file" )
         break;
     }
