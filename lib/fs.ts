@@ -4,9 +4,8 @@ import { promisify } from "util";
 
 const readFile = promisify( fs.readFile );
 
-const configDir = `${process.env.HOME}/.config/cnsm`;
+export const configDir = `${process.env.HOME}/.config/cnsm`;
 const dataFile = `${configDir}/data.json`;
-// const dataBackup = `${configDir}/backup-data.json`
 
 export async function readConfig() {
   await mkdir( configDir );

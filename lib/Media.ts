@@ -1,12 +1,12 @@
 import chalk from "chalk";
 import childProcess from "child_process";
 
+export const dataTypes = [ "article" , "series" , "video" , "movie" , "manga" , "comic" , "anime" , "file" ]
 interface MediaData {
   name: string;
   type: "article" | "series" | "video" | "movie" | "manga" | "comic" | "anime" | "file";
   desc?: string;
   nf?: boolean;
-  length?: number;
 }
 
 export default class Media {
@@ -21,7 +21,6 @@ export default class Media {
     this.type = data.type;
 
     this.nf = data.nf ? data.nf : this.nf;
-    this.length = data.length ? data.length : this.length;
     this.desc = data.desc ? data.desc : this.desc;
   }
 
@@ -135,3 +134,4 @@ export default class Media {
     }
   }
 }
+
