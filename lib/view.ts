@@ -5,7 +5,7 @@ import * as fs from "./fs";
 import render from "./render";
 
 export default async function view() {
-  const data = await fs.readConfig();
+  let data = await fs.readConfig();
   render( data ); // initial rendering
 
   const rlp = readline.createInterface( {
@@ -62,6 +62,7 @@ export default async function view() {
   p,  prev   - view previous 10 entries
   f,  filter - filter by type (example: $ f C; $ filter manga)
       reset  - reset filter
+  r,  reload - reload data file
 
   o,  open   - open with default handler for type (definitions found in lib/Media.ts)
                  example: manga searches for the title on mangalife.us in $BROWSER
@@ -98,6 +99,11 @@ export default async function view() {
         selected = translateSelection( selected );
         data.splice( selected, 1 );
         console.log( `Removed ${selected + 1}.` );
+        break;
+      case "r":
+      case "reload":
+        data = await fs.readConfig();
+        console.log( "Reloaded data file" )
         break;
     }
   }
