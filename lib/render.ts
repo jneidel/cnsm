@@ -40,15 +40,23 @@ export function validateFilters( filterCategory ) {
     case "f":
     case "file":
       return "file";
+    case "g":
+    case "prog":
+      return "prog";
     default:
       return null;
   }
 }
 
 export default function render( data, range = 0, filterCategory: any = null ) {
-  const mediaArr = data
-    .map( d => convertToMedia( d ) )
-    .filter( media => filterCategory ? media.type === filterCategory : true );
+  data = data.map( d => convertToMedia( d ) );
+
+  const mediaArr =
+    filterCategory === "prog" ?
+      data.filter( media => media.prog ) :
+      data.filter( media =>
+        filterCategory ? media.type === filterCategory : true,
+      );
 
   const start = ( range => range * 10 )( range );
   const end = ( range => ( range + 1 ) * 10 )( range );
@@ -61,12 +69,19 @@ export default function render( data, range = 0, filterCategory: any = null ) {
         `-${mediaArr.length}` :
       `-${end}`;
 
+  const filterDisplay =
+    filterCategory === "prog" ?
+      `, ${chalk.green( "Filter:" )} g` :
+      filterCategory ?
+        `, ${chalk.green( "Filter:" )} ${mediaArr[0].translateType()}` :
+        "";
+
   const output: string = currentSelection
     .map( ( media, index ) => media.toString( index ) )
     .reduce( ( str, cur ) => {
       return `${str}
 ${cur}`;
-    }, `${chalk.green( "Entries:" )} ${start + 1}${endDisplay}${filterCategory ? `, ${chalk.green( "Filter:" )} ${mediaArr[0].translateType()}` : ""}` );
+    }, `${chalk.green( "Entries:" )} ${start + 1}${endDisplay}${filterDisplay}` );
 
   console.log( output );
 }
