@@ -21,6 +21,22 @@ export default async function view() {
   const translateSelection = selected =>
     ( selected - 1 ) * ( currentView * 10 + 1 );
 
+  let previousDataFileModified: number | null = null;
+  (function reloadOnFileChange() {
+    setTimeout( async () => {
+      const currentDataFileModified = await fs.getDataFileModified()
+
+      if (previousDataFileModified && previousDataFileModified < currentDataFileModified) {
+        draw()
+        process.stdout.write( `Automatic reload (data file changed in background)
+${chalk.blue("$ ")}` )
+      }
+
+      previousDataFileModified = currentDataFileModified
+      return reloadOnFileChange()
+    }, 3000 )
+  })()
+
   // input loop
   while ( true ) {
     const answer = await rlp.questionAsync( `${chalk.blue( "$" )} ` );

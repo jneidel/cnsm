@@ -3,6 +3,7 @@ import * as fs from "fs";
 import { promisify } from "util";
 
 const readFile = promisify( fs.readFile );
+const stat = promisify( fs.stat );
 
 export const configDir = `${process.env.HOME}/.config/cnsm`;
 const dataFile = `${configDir}/data.json`;
@@ -23,5 +24,10 @@ export function writeConfig( data ) { // exit handler can't handle async
 
   const json = JSON.stringify( data, null, 2 );
   fs.writeFileSync( dataFile, json );
+}
+
+export function getDataFileModified() {
+  return stat( dataFile )
+    .then( stats => stats.mtimeMs )
 }
 
