@@ -42,6 +42,7 @@ export default async function view() {
         previousDataFileModified &&
         previousDataFileModified < currentDataFileModified
       ) {
+        data = await fs.readConfig();
         draw();
         process.stdout.write( `Automatic reload (data file changed in background)
 ${chalk.blue( "$ " )}` );
