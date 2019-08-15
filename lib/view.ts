@@ -5,6 +5,18 @@ import * as fs from "./fs";
 import render from "./render";
 import { validateFilters } from "./render";
 
+function getFilteredData( data, currentFilter ) {
+  if ( currentFilter ) {
+    const filteredData: number[] = [];
+    data.forEach( ( val, index ) => {
+      if ( val.type === currentFilter ) filteredData.push( index );
+    } );
+    return filteredData;
+  } else {
+    return data;
+  }
+}
+
 export default async function view( passedFilter = null ) {
   let data = await fs.readConfig();
   let currentView = 0;
@@ -17,11 +29,7 @@ export default async function view( passedFilter = null ) {
     let selectedIndex = currentView * 10 + Number( selected ) - 1;
 
     if ( currentFilter ) {
-      const filtered: number[] = [];
-      data.forEach( ( val, index ) => {
-        if ( val.type === currentFilter ) filtered.push( index );
-      } );
-
+      const filtered = getFilteredData( data, currentFilter );
       selectedIndex = filtered[selectedIndex]; // map what the user sees (& types) to the actual data
     }
 
@@ -68,14 +76,21 @@ ${chalk.blue( "$ " )}` );
         break;
       case "next":
       case "n":
-        currentView += 1;
-        draw();
+        const filteredLen = getFilteredData( data, currentFilter ).length;
+        if ( filteredLen >= ( currentView + 1 ) * 10 ) {
+          currentView += 1;
+          draw();
+        } else {console.log( "Reached last page of entries" );}
+
         break;
       case "previous":
       case "prev":
       case "p":
-        currentView = currentView === 0 ? 0 : currentView - 1;
-        draw();
+        if ( currentView === 0 ) {console.log( "Reached first page of entries" );} else {
+          currentView -= 1;
+          draw();
+        }
+
         break;
       case "exit":
         process.exit();
