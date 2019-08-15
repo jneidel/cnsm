@@ -3,6 +3,7 @@ import readline from "readline-promise";
 import chalk from "chalk";
 import * as fs from "./fs";
 import render from "./render";
+import { validateFilters } from "./render";
 
 export default async function view() {
   let data = await fs.readConfig();
@@ -15,11 +16,23 @@ export default async function view() {
   } );
 
   let currentView = 0;
-  let currentFilter = null;
+  let currentFilter: string | null = null;
 
   const draw = () => render( data, currentView, currentFilter );
-  const translateSelection = selected =>
-    currentView * 10 + Number( selected ) - 1;
+  const translateSelection = selected => {
+    let selectedIndex = currentView * 10 + Number( selected ) - 1;
+
+    if ( currentFilter ) {
+      const filtered: number[] = [];
+      data.forEach( ( val, index ) => {
+        if ( val.type === currentFilter ) filtered.push( index );
+      } );
+
+      selectedIndex = filtered[selectedIndex]; // map what the user sees (& types) to the actual data
+    }
+
+    return selectedIndex;
+  };
 
   let previousDataFileModified: number | null = null;
   ( function reloadOnFileChange() {
@@ -95,9 +108,8 @@ ${chalk.blue( "$ " )}` );
         break;
       case "f":
       case "filter":
-        currentFilter = selected;
-        currentView = 0;
-        console.log( currentFilter );
+        currentFilter = validateFilters( selected );
+        currentView = currentFilter ? 0 : currentView;
         draw();
         break;
       case "re":
@@ -122,9 +134,10 @@ ${chalk.blue( "$ " )}` );
       case "remove":
       case "delete":
         selected = translateSelection( selected );
+        const removedName = data[selected].name;
         data.splice( selected, 1 );
         draw();
-        console.log( `Removed ${selected + 1}.` );
+        console.log( `Removed ${selected + 1}. (${removedName})` );
         break;
       case "r":
       case "reload":

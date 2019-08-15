@@ -6,7 +6,7 @@ function convertToMedia( obj ) {
   return mediaObj;
 }
 
-function validateFilters( filterCategory ) {
+export function validateFilters( filterCategory ) {
   switch ( filterCategory ) {
     case "S":
     case "s":
@@ -65,4 +65,3 @@ ${cur}`;
 
   console.log( output );
 }
-
