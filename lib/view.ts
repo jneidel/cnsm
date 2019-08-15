@@ -17,7 +17,6 @@ export default async function view() {
 
   let currentView = 0;
   let currentFilter: string | null = null;
-
   const draw = () => render( data, currentView, currentFilter );
   const translateSelection = selected => {
     let selectedIndex = currentView * 10 + Number( selected ) - 1;
@@ -85,6 +84,7 @@ ${chalk.blue( "$ " )}` );
       case "w":
       case "write":
         fs.writeConfig( data );
+        previousDataFileModified = await fs.getDataFileModified();
         break;
       case "help":
         console.log( `${chalk.green( "Available commands:" )}
