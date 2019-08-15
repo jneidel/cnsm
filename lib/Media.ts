@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import childProcess from "child_process";
 
-export const dataTypes = [ "article" , "series" , "video" , "movie" , "manga" , "comic" , "anime" , "file" ]
+export const dataTypes = [ "article", "series", "video", "movie", "manga", "comic", "anime", "file" ];
 interface MediaData {
   name: string;
   type: "article" | "series" | "video" | "movie" | "manga" | "comic" | "anime" | "file";

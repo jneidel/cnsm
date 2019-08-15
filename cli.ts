@@ -48,34 +48,34 @@ Flags for 'add'
 
   // add
   if ( args._[0] === "add" ) {
-    args._.shift()
+    args._.shift();
 
     if ( !args.type || !dataTypes.includes( args.type ) ) {
       console.log( "A media type is required." );
       console.log( "Available:" );
-      console.log( dataTypes )
-      process.exit()
+      console.log( dataTypes );
+      process.exit();
     }
 
-    if ( args._.length < 1 ) {
-      console.log( "A name is required." )
-      console.log( "  Try --help for help" )
+    if ( args._.length === 0 ) {
+      console.log( "A name is required." );
+      console.log( "  Try --help for help" );
     }
 
     const data: any = {
       name: args._.join( " " ),
       type: args.type,
-    }
+    };
 
     if ( args.nf )
-      data.nf = args.nf
+      data.nf = args.nf;
     if ( args.desc )
-      data.desc = args.desc
+      data.desc = args.desc;
 
-    await add( data )
+    await add( data );
   } else {
-    console.log( "Unknown command" )
-    console.log( "  Try --help for help" )
+    console.log( "Unknown command" );
+    console.log( "  Try --help for help" );
   }
 }
 

@@ -18,28 +18,32 @@ export default async function view() {
   let currentFilter = null;
 
   const draw = () => render( data, currentView, currentFilter );
-  const translateSelection = selected => currentView * 10 + Number( selected ) - 1;
+  const translateSelection = selected =>
+    currentView * 10 + Number( selected ) - 1;
 
   let previousDataFileModified: number | null = null;
-  (function reloadOnFileChange() {
+  ( function reloadOnFileChange() {
     setTimeout( async () => {
-      const currentDataFileModified = await fs.getDataFileModified()
+      const currentDataFileModified = await fs.getDataFileModified();
 
-      if (previousDataFileModified && previousDataFileModified < currentDataFileModified) {
-        draw()
+      if (
+        previousDataFileModified &&
+        previousDataFileModified < currentDataFileModified
+      ) {
+        draw();
         process.stdout.write( `Automatic reload (data file changed in background)
-${chalk.blue("$ ")}` )
+${chalk.blue( "$ " )}` );
       }
 
-      previousDataFileModified = currentDataFileModified
-      return reloadOnFileChange()
-    }, 3000 )
-  })()
+      previousDataFileModified = currentDataFileModified;
+      return reloadOnFileChange();
+    }, 3000 );
+  } )();
 
   // input loop
   while ( true ) {
     const answer = await rlp.questionAsync( `${chalk.blue( "$" )} ` );
-    let [ command, selected, secondParam ] = [ ...answer.split( " " ) ]
+    let [ command, selected, secondParam ] = [ ...answer.split( " " ) ];
     selected = selected === "0" ? 10 : selected;
     let media;
 
@@ -92,7 +96,7 @@ ${chalk.blue("$ ")}` )
       case "f":
       case "filter":
         currentFilter = selected;
-        console.log( currentFilter )
+        console.log( currentFilter );
         draw();
         break;
       case "re":
@@ -118,21 +122,21 @@ ${chalk.blue("$ ")}` )
       case "delete":
         selected = translateSelection( selected );
         data.splice( selected, 1 );
-        draw()
+        draw();
         console.log( `Removed ${selected + 1}.` );
         break;
       case "r":
       case "reload":
         data = await fs.readConfig();
-        draw()
-        console.log( "Reloaded data file" )
+        draw();
+        console.log( "Reloaded data file" );
         break;
       case "g":
       case "prog":
         selected = translateSelection( selected );
-        data[selected].prog = secondParam
-        console.log( `Setting progress for ${selected + 1} to ${secondParam}` )
-        break
+        data[selected].prog = secondParam;
+        console.log( `Setting progress for ${selected + 1} to ${secondParam}` );
+        break;
     }
   }
 }

@@ -28,6 +28,6 @@ export function writeConfig( data ) { // exit handler can't handle async
 
 export function getDataFileModified() {
   return stat( dataFile )
-    .then( stats => stats.mtimeMs )
+    .then( stats => stats.mtimeMs );
 }
 
