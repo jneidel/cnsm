@@ -96,6 +96,7 @@ ${chalk.blue( "$ " )}` );
       case "f":
       case "filter":
         currentFilter = selected;
+        currentView = 0;
         console.log( currentFilter );
         draw();
         break;
