@@ -46,8 +46,6 @@ export function validateFilters( filterCategory ) {
 }
 
 export default function render( data, range = 0, filterCategory: any = null ) {
-  filterCategory = validateFilters( filterCategory );
-
   const mediaArr = data
     .map( d => convertToMedia( d ) )
     .filter( media => filterCategory ? media.type === filterCategory : true );
@@ -56,12 +54,19 @@ export default function render( data, range = 0, filterCategory: any = null ) {
   const end = ( range => ( range + 1 ) * 10 )( range );
   const currentSelection = mediaArr.slice( start, end );
 
+  const endDisplay =
+    mediaArr.length < end ?
+      mediaArr.length == start + 1 ?
+        "" :
+        `-${mediaArr.length}` :
+      `-${end}`;
+
   const output: string = currentSelection
     .map( ( media, index ) => media.toString( index ) )
     .reduce( ( str, cur ) => {
       return `${str}
 ${cur}`;
-    }, `${chalk.green( "Entries:" )} ${start + 1} - ${end}${filterCategory ? `, ${chalk.green( "Filter:" )} ${mediaArr[0].translateType()}` : ""}` );
+    }, `${chalk.green( "Entries:" )} ${start + 1}${endDisplay}${filterCategory ? `, ${chalk.green( "Filter:" )} ${mediaArr[0].translateType()}` : ""}` );
 
   console.log( output );
 }
