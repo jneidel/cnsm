@@ -96,6 +96,8 @@ export default async function view() {
         media.altOpen();
         break;
       case "d":
+      case "rm":
+      case "remove":
       case "delete":
         selected = translateSelection( selected );
         data.splice( selected, 1 );
