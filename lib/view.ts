@@ -25,7 +25,7 @@ export default async function view() {
   while ( true ) {
     const answer = await rlp.questionAsync( `${chalk.blue( "$" )} ` );
     let [ command, selected, secondParam ] = [ ...answer.split( " " ) ]
-    selected = selected === "0" ? 10 : Number( selected );
+    selected = selected === "0" ? 10 : selected;
     let media;
 
     switch ( command ) {
@@ -60,7 +60,7 @@ export default async function view() {
   n,  next   - view next 10 entries
   p,  prev   - view previous 10 entries
   f,  filter - filter by type (usage: $ f C; $ filter manga)
-      reset  - reset filter
+  re, reset  - reset filter
   r,  reload - reload data file
 
   o,  open   - open with default handler for type (definitions found in lib/Media.ts)
@@ -77,8 +77,10 @@ export default async function view() {
       case "f":
       case "filter":
         currentFilter = selected;
+        console.log( currentFilter )
         draw();
         break;
+      case "re":
       case "reset":
         currentFilter = null;
         draw();
