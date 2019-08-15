@@ -18,8 +18,7 @@ export default async function view() {
   let currentFilter = null;
 
   const draw = () => render( data, currentView, currentFilter );
-  const translateSelection = selected =>
-    ( selected - 1 ) * ( currentView * 10 + 1 );
+  const translateSelection = selected => currentView * 10 + Number( selected ) - 1;
 
   let previousDataFileModified: number | null = null;
   (function reloadOnFileChange() {
