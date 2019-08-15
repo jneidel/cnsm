@@ -40,6 +40,10 @@ export function validateFilters( filterCategory ) {
     case "f":
     case "file":
       return "file";
+    case "B":
+    case "b":
+    case "book":
+      return "book";
     case "g":
     case "prog":
       return "prog";

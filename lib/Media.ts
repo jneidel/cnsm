@@ -1,10 +1,10 @@
 import chalk from "chalk";
 import childProcess from "child_process";
 
-export const dataTypes = [ "article", "series", "video", "movie", "manga", "comic", "anime", "file" ];
+export const dataTypes = [ "article", "series", "video", "movie", "manga", "comic", "anime", "file", "book" ];
 interface MediaData {
   name: string;
-  type: "article" | "series" | "video" | "movie" | "manga" | "comic" | "anime" | "file";
+  type: "article" | "series" | "video" | "movie" | "manga" | "comic" | "anime" | "file" | "book";
   desc?: string;
   nf?: boolean;
   prog: number;
@@ -45,6 +45,8 @@ export default class Media {
         return chalk.black.bgCyan( "AN" );
       case "file":
         return chalk.black.bgMagenta( "F" );
+      case "book":
+        return chalk.red.bgYellow( "B" );
     }
   }
   private evalDescriptor() {
@@ -66,6 +68,7 @@ export default class Media {
       case "manga":
       case "comic":
       case "anime":
+      case "book":
         return `${name} (${description})`;
     }
   }
@@ -113,6 +116,10 @@ export default class Media {
       case "file":
         console.log( `Path is: ${this.name}` );
         break;
+      case "book":
+        this.openInBrowser( `http://www.libgen.io/foreignfiction/index.php?s=${encodeURIComponent( this.name )}&f_lang=English&f_ext=epub` );
+        console.log( "Opened in libgen" );
+        break;
     }
   }
   altOpen() {
@@ -126,6 +133,10 @@ export default class Media {
       case "manga":
         this.openInBrowser( `https://www.mangareader.net/search/?w=${encodeURIComponent( this.name )}&rd=0&status=0&order=0&genre=&p=0` );
         console.log( "Opened in mangareader" );
+        break;
+      case "book":
+        this.openInBrowser( `https://www.goodreads.com/search?q=${encodeURIComponent( this.name )}` );
+        console.log( "Opened in goodreads" );
         break;
       case "article":
       case "video":
