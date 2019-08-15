@@ -5,19 +5,14 @@ import * as fs from "./fs";
 import render from "./render";
 import { validateFilters } from "./render";
 
-export default async function view() {
+export default async function view( passedFilter = null ) {
   let data = await fs.readConfig();
-  render( data ); // initial rendering
-
-  const rlp = readline.createInterface( {
-    input   : process.stdin,
-    output  : process.stdout,
-    terminal: true,
-  } );
-
   let currentView = 0;
-  let currentFilter: string | null = null;
+  let currentFilter: string | null = validateFilters( passedFilter );
   const draw = () => render( data, currentView, currentFilter );
+
+  draw(); // initial rendering
+
   const translateSelection = selected => {
     let selectedIndex = currentView * 10 + Number( selected ) - 1;
 
@@ -52,6 +47,12 @@ ${chalk.blue( "$ " )}` );
       return reloadOnFileChange();
     }, 3000 );
   } )();
+
+  const rlp = readline.createInterface( {
+    input   : process.stdin,
+    output  : process.stdout,
+    terminal: true,
+  } );
 
   // input loop
   while ( true ) {
