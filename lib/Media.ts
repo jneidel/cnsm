@@ -85,7 +85,7 @@ export default class Media {
   // handle open command depending on type
   open() {
     if ( this.nf ) {
-      this.openInBrowser( `www.netflix.com/search?q=${encodeURIComponent( this.name )}` );
+      childProcess.spawn( String( process.env.ALT_BROWSER ), [ `www.netflix.com/search?q=${encodeURIComponent( this.name )}` ] );
       console.log( "Opened in netflix" );
       return;
     }
