@@ -72,6 +72,7 @@ ${chalk.blue( "$ " )}` );
     switch ( command ) {
       case "list":
       case "ls":
+      case "l":
         draw();
         break;
       case "next":
@@ -154,7 +155,7 @@ ${chalk.blue( "$ " )}` );
         const removedName = data[selected].name;
         data.splice( selected, 1 );
         draw();
-        console.log( `Removed ${selected + 1}. (${removedName})` );
+        console.log( `Removed ${selected + 1} (${removedName})` );
         break;
       case "r":
       case "reload":
@@ -168,6 +169,10 @@ ${chalk.blue( "$ " )}` );
         data[selected].prog = secondParam;
         console.log( `Setting progress for ${selected + 1} to ${secondParam}` );
         break;
+      case "gg":
+        currentView = 0;
+        console.log( "Back to first page" )
+        draw();
     }
   }
 }
