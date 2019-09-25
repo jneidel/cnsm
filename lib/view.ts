@@ -65,6 +65,8 @@ ${chalk.blue( "$ " )}` );
   // input loop
   while ( true ) {
     const answer = await rlp.questionAsync( `${chalk.blue( "$" )} ` );
+    const filteredLen = getFilteredData( data, currentFilter ).length;
+
     let [ command, selected, secondParam ] = [ ...answer.split( " " ) ];
     selected = selected === "0" ? 10 : selected;
     let media;
@@ -77,17 +79,19 @@ ${chalk.blue( "$ " )}` );
         break;
       case "next":
       case "n":
-        const filteredLen = getFilteredData( data, currentFilter ).length;
         if ( filteredLen >= ( currentView + 1 ) * 10 ) {
           currentView += 1;
           draw();
-        } else {console.log( "Reached last page of entries" );}
+        } else
+          console.log( "Reached last page of entries" );
 
         break;
       case "previous":
       case "prev":
       case "p":
-        if ( currentView === 0 ) {console.log( "Reached first page of entries" );} else {
+        if ( currentView === 0 )
+          console.log( "Reached first page of entries" );
+        else {
           currentView -= 1;
           draw();
         }
@@ -119,6 +123,9 @@ ${chalk.blue( "$ " )}` );
                  example: movie search for the title on imdb.com in $BROWSER
 
   g,  prog   - set progress for selected (usage: $ prog 3 65)
+
+  gg         - goto first page of entries
+  G          - goto last page of entries
 
   w,  write  - write changes
   q,  wq     - write changes and quit
@@ -171,8 +178,14 @@ ${chalk.blue( "$ " )}` );
         break;
       case "gg":
         currentView = 0;
-        console.log( "Back to first page" )
         draw();
+        console.log( "Back to first page" );
+        break;
+      case "G":
+        const lastView = Math.floor( filteredLen / 10 );
+        currentView = lastView;
+        draw();
+        console.log( "Switched to last page of entries" );
     }
   }
 }
