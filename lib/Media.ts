@@ -1,18 +1,18 @@
 import chalk from "chalk";
 import childProcess from "child_process";
 
-export const dataTypes = [ "article", "series", "video", "movie", "manga", "comic", "anime", "file", "book" ];
+export const dataTypes = [ "article", "series", "video", "movie", "manga", "comic", "anime", "file", "book", "art" ];
 interface MediaData {
   name: string;
-  type: "article" | "series" | "video" | "movie" | "manga" | "comic" | "anime" | "file" | "book";
+  type: "article" | "series" | "video" | "movie" | "manga" | "comic" | "anime" | "file" | "book" | "art";
   desc?: string;
   nf?: boolean;
   prog: number;
 }
 
 export default class Media {
-  name;
-  type;
+  name: string;
+  type: string;
   desc = "";
   nf = false;
   prog = 0;
@@ -47,6 +47,8 @@ export default class Media {
         return chalk.black.bgMagenta( "F" );
       case "book":
         return chalk.red.bgYellow( "B" );
+      case "art":
+        return chalk.green.bgRed( "AR" );
     }
   }
   private evalDescriptor() {
@@ -62,6 +64,7 @@ export default class Media {
       case "article":
       case "video":
       case "file":
+      case "art":
         return description;
       case "series":
       case "movie":
@@ -70,6 +73,8 @@ export default class Media {
       case "anime":
       case "book":
         return `${name} (${description})`;
+      default:
+        return
     }
   }
 
@@ -78,7 +83,7 @@ export default class Media {
     return `${chalk.yellow( String( index ) )}: ${this.translateType()} - ${this.evalDescriptor()}${this.prog ? chalk.cyan( ` ${this.prog}%` ) : ""}`;
   }
 
-  private openInBrowser( url ) {
+  private openInBrowser( url: string ) {
     childProcess.spawn( String( process.env.BROWSER ), [ url ] );
   }
 
@@ -92,6 +97,7 @@ export default class Media {
 
     switch ( this.type ) {
       case "article":
+      case "art":
       case "video":
         this.openInBrowser( this.name );
         console.log( "Opened url in browser" );

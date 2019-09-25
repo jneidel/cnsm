@@ -6,7 +6,7 @@ function convertToMedia( obj ) {
   return mediaObj;
 }
 
-export function validateFilters( filterCategory ) {
+export function validateFilters( filterCategory: string | null ) {
   switch ( filterCategory ) {
     case "S":
     case "s":
@@ -47,6 +47,10 @@ export function validateFilters( filterCategory ) {
     case "g":
     case "prog":
       return "prog";
+    case "AR":
+    case "ar":
+    case "art":
+      return "art";
     default:
       return null;
   }
