@@ -88,6 +88,7 @@ ${chalk.blue( "$ " )}` );
         break;
       case "previous":
       case "prev":
+      case "..":
       case "p":
         if ( currentView === 0 )
           console.log( "Reached first page of entries" );
