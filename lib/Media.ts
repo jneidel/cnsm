@@ -112,7 +112,7 @@ export default class Media {
         break;
       case "series":
       case "movie":
-        this.openInBrowser( `https://tpb12.ukpass.co/search/${encodeURIComponent( this.name )}/0/99/0` );
+        this.openInBrowser( `https://www.everybabes.com/search.php?q=${encodeURIComponent( this.name )}&page=0&orderby=99` );
         console.log( "Opened in tpb" );
         break;
       case "anime":
