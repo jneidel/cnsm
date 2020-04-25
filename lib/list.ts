@@ -1,8 +1,8 @@
-import { validateFilters } from "./render";
+import { validateFilter } from "./validateFilter";
 import { readConfig } from "./fs";
 
 export default async function list( unvalidatedFilter = null ) {
-  const filter = validateFilters( unvalidatedFilter );
+  const filter = validateFilter( unvalidatedFilter );
 
   const data = await readConfig()
     .then( d => filter ?  d.filter( d => d.type === filter ) : d )

@@ -3,7 +3,7 @@ import readline from "readline-promise";
 import chalk from "chalk";
 import * as fs from "./fs";
 import render from "./render";
-import { validateFilters } from "./render";
+import { validateFilter } from "./validateFilter";
 
 function getFilteredData( data, currentFilter ) {
   if ( currentFilter ) {
@@ -20,7 +20,7 @@ function getFilteredData( data, currentFilter ) {
 export default async function view( passedFilter = null ) {
   let data = await fs.readConfig();
   let currentView = 0;
-  let currentFilter: string | null = validateFilters( passedFilter );
+  let currentFilter: string | null = validateFilter( passedFilter );
   const draw = () => render( data, currentView, currentFilter );
 
   draw(); // initial rendering
@@ -134,7 +134,7 @@ ${chalk.blue( "$ " )}` );
         break;
       case "f":
       case "filter":
-        currentFilter = validateFilters( selected );
+        currentFilter = validateFilter( selected );
         currentView = currentFilter ? 0 : currentView;
         draw();
         break;
