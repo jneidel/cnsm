@@ -29,10 +29,10 @@ export default class ItemList {
   private list: Item[];
 
   // test use
-  constructor( data = [] ) {
-    const arr: any = [];
-    data.forEach( i => arr.append( validateItem( i ) ) );
-    this.list = arr;
+  constructor( data: any[] = [] ) {
+    const res: any = [];
+    data.forEach( i => res.push( validateItem( i ) ) ); // weird ts-jest error with reduce
+    this.list = res;
   }
 
   // normal use, can't be run in constructor bc of async
@@ -45,7 +45,7 @@ export default class ItemList {
     return this.list;
   }
 
-  search(): Item[] {
+  search( query ): Item[] {
     return [];
   }
 }

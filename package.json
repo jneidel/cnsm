@@ -29,10 +29,12 @@
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.2",
+    "jest": "^25.4.0",
     "ts-jest": "^25.4.0",
     "typescript": "^3.8.3"
   },
   "jest": {
+    "preset": "ts-jest",
     "testEnvironment": "node",
     "testRegex": [
       ".*test/.+.test.ts"
