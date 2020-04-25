@@ -19,12 +19,12 @@
     "cnsm": "build/cli.js"
   },
   "dependencies": {
-    "chalk": "^2.4.2",
-    "make-dir": "^3.0.0",
-    "meow": "^5.0.0",
+    "chalk": "^4.0.0",
+    "make-dir": "^3.1.0",
+    "meow": "^3.7.0",
     "readline-promise": "^1.0.4"
   },
   "devDependencies": {
-    "@types/node": "^12.7.1"
+    "@types/node": "^13.13.2"
   }
 }
