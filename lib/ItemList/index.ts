@@ -1,4 +1,5 @@
 import { readConfig } from "../fs";
+import { validateFilter } from "../validateFilter";
 
 type Item = {
   name: string;
@@ -45,10 +46,10 @@ export default class ItemList {
     return this.list;
   }
 
-  search( query: string ): Item[] {
+  search( query: string, list: Item[] = this.get() ): Item[] {
     const regex = new RegExp( query, "i" );
 
-    const matches = this.get().filter( i => {
+    const matches = list.filter( i => {
       let valueToMatch = i.name;
 
       if ( i.medium == "article" ) {
@@ -59,5 +60,14 @@ export default class ItemList {
     } );
 
     return matches;
+  }
+
+  // Todo: add special prog filter
+  filter( rawFilters: any[] ): Item[] {
+    const filters = rawFilters
+      .map( f => validateFilter( f ) )
+      .filter( f => f != null );
+
+    return this.get().filter( i => ~[...filters].indexOf( i.medium ) );
   }
 }
