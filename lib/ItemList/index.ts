@@ -45,7 +45,19 @@ export default class ItemList {
     return this.list;
   }
 
-  search( query ): Item[] {
-    return [];
+  search( query: string ): Item[] {
+    const regex = new RegExp( query, "i" );
+
+    const matches = this.get().filter( i => {
+      let valueToMatch = i.name;
+
+      if ( i.medium == "article" ) {
+        valueToMatch = i.desc || i.name;
+      }
+
+      return regex.test( valueToMatch )
+    } );
+
+    return matches;
   }
 }
