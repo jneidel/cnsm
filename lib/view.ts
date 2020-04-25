@@ -1,60 +1,51 @@
-import Media from "./Media";
+// import Media from "./Media";
 import readline from "readline-promise";
 import chalk from "chalk";
-import * as fs from "./fs";
+// import * as fs from "./fs";
 import render from "./render";
-import { validateFilter } from "./validateFilter";
-
-function getFilteredData( data, currentFilter ) {
-  if ( currentFilter ) {
-    const filteredData: number[] = [];
-    data.forEach( ( val, index ) => {
-      if ( val.type === currentFilter ) filteredData.push( index );
-    } );
-    return filteredData;
-  } else {
-    return data;
-  }
-}
+import ItemList from "./ItemList";
 
 export default async function view( passedFilter = null ) {
-  let data = await fs.readConfig();
+  const mainList = new ItemList();
+  await mainList.setFromConfig();
+
   let currentView = 0;
-  let currentFilter: string | null = validateFilter( passedFilter );
-  const draw = () => render( data, currentView, currentFilter );
+  let filters = [ passedFilter ].filter( f => f != null );
+  let list = mainList.get(); // Todo: fix empty, null[] filters
+  const draw = () => render( list, filters, currentView );
 
   draw(); // initial rendering
 
   const translateSelection = selected => {
     let selectedIndex = currentView * 10 + Number( selected ) - 1;
 
-    if ( currentFilter ) {
-      const filtered = getFilteredData( data, currentFilter );
-      selectedIndex = filtered[selectedIndex]; // map what the user sees (& types) to the actual data
+    if ( filters.length ) {
+      selectedIndex = list.map( ( i, index ) => index )[selectedIndex]; // map what the user sees (& types) to the actual data
     }
 
     return selectedIndex;
   };
 
-  let previousDataFileModified: number | null = null;
-  ( function reloadOnFileChange() {
-    setTimeout( async () => {
-      const currentDataFileModified = await fs.getDataFileModified();
+  // let previousDataFileModified: number | null = null;
+  // ( function reloadOnFileChange() {
+  //   setTimeout( async () => {
+  //     const currentDataFileModified = await fs.getDataFileModified();
 
-      if (
-        previousDataFileModified &&
-        previousDataFileModified < currentDataFileModified
-      ) {
-        data = await fs.readConfig();
-        draw();
-        process.stdout.write( `Automatic reload (data file changed in background)
-${chalk.blue( "$ " )}` );
-      }
+  //     if (
+  //       previousDataFileModified &&
+  //       previousDataFileModified < currentDataFileModified
+  //     ) {
+  //       await mainList.setFromConfig();
+  //       list = mainList.filter( filters );
+  //       draw();
+  //       process.stdout.write( `Automatic reload (data file changed in background)
+// ${chalk.blue( "$ " )}` );
+  //     }
 
-      previousDataFileModified = currentDataFileModified;
-      return reloadOnFileChange();
-    }, 3000 );
-  } )();
+  //     previousDataFileModified = currentDataFileModified;
+  //     return reloadOnFileChange();
+  //   }, 3000 );
+  // } )();
 
   const rlp = readline.createInterface( {
     input   : process.stdin,
@@ -65,11 +56,9 @@ ${chalk.blue( "$ " )}` );
   // input loop
   while ( true ) {
     const answer = await rlp.questionAsync( `${chalk.blue( "$" )} ` );
-    const filteredLen = getFilteredData( data, currentFilter ).length;
 
     let [ command, selected, secondParam ] = [ ...answer.split( " " ) ];
     selected = selected === "0" ? 10 : selected;
-    let media;
 
     switch ( command ) {
       case "list":
@@ -79,7 +68,7 @@ ${chalk.blue( "$ " )}` );
         break;
       case "next":
       case "n":
-        if ( filteredLen >= ( currentView + 1 ) * 10 ) {
+        if ( list.length >= ( currentView + 1 ) * 10 ) {
           currentView += 1;
           draw();
         } else
@@ -102,12 +91,14 @@ ${chalk.blue( "$ " )}` );
         process.exit();
       case "q":
       case "wq":
-        fs.writeConfig( data );
+        // Todo: implement writing
+        // fs.writeConfig( data );
         process.exit();
       case "w":
       case "write":
-        fs.writeConfig( data );
-        previousDataFileModified = await fs.getDataFileModified();
+        // Todo: implement writing
+        // fs.writeConfig( data );
+        // previousDataFileModified = await fs.getDataFileModified();
         break;
       case "help":
         console.log( `${chalk.green( "Available commands:" )}
@@ -134,47 +125,53 @@ ${chalk.blue( "$ " )}` );
         break;
       case "f":
       case "filter":
-        currentFilter = validateFilter( selected );
-        currentView = currentFilter ? 0 : currentView;
+        filters.push( selected );
+        currentView = 0;
+        list = mainList.filter( filters );
         draw();
         break;
       case "re":
       case "reset":
-        currentFilter = null;
+        filters = [];
+        list = mainList.filter( filters );
         draw();
         break;
       case "o":
       case "open":
         selected = translateSelection( selected );
-        media = new Media( data[selected] );
-        media.open();
+        // Todo: fix media
+        // media = new Media( list[selected] );
+        // media.open();
         break;
       case "a":
       case "alt":
         selected = translateSelection( selected );
-        media = new Media( data[selected] );
-        media.altOpen();
+        // media = new Media( list[selected] );
+        // media.altOpen();
         break;
       case "d":
       case "rm":
       case "remove":
       case "delete":
         selected = translateSelection( selected );
-        const removedName = data[selected].name;
-        data.splice( selected, 1 );
+        const removedName = list[selected].name;
+        // Todo: implement deletion
+        list.splice( selected, 1 );
         draw();
         console.log( `Removed ${selected + 1} (${removedName})` );
         break;
       case "r":
       case "reload":
-        data = await fs.readConfig();
+        // Todo: refactor reload + reassign to list
+        await mainList.setFromConfig();
+        list = mainList.filter( filters );
         draw();
         console.log( "Reloaded data file" );
         break;
       case "g":
       case "prog":
         selected = translateSelection( selected );
-        data[selected].prog = secondParam;
+        list[selected].prog = secondParam;
         console.log( `Setting progress for ${selected + 1} to ${secondParam}` );
         break;
       case "gg":
@@ -183,7 +180,7 @@ ${chalk.blue( "$ " )}` );
         console.log( "Back to first page" );
         break;
       case "G":
-        const lastView = Math.floor( filteredLen / 10 );
+        const lastView = Math.floor( list.length / 10 );
         currentView = lastView;
         draw();
         console.log( "Switched to last page of entries" );
