@@ -1,13 +1,8 @@
 import chalk from "chalk";
 import Media from "./Media";
 
-function convertToMedia( obj ) {
-  const mediaObj = new Media( obj );
-  return mediaObj;
-}
-
 export default function render( data, range = 0, filterCategory: any = null ) {
-  data = data.map( d => convertToMedia( d ) );
+  data = data.map( d => new Media( d ) );
 
   const mediaArr =
     filterCategory === "prog" ?
