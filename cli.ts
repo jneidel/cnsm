@@ -4,9 +4,7 @@ import meow from "meow";
 import { dataTypes } from "./lib/Media";
 import view from "./lib/view";
 import add from "./lib/add";
-
-import { validateFilters } from "./lib/render";
-import { readConfig } from "./lib/fs";
+import list from "./lib/list";
 
 async function main() {
   const cli = meow(
@@ -15,7 +13,7 @@ async function main() {
 Usage
   cnsm             - view list (try 'help' for usage)
   cnsm add <name>  - add to list
-  cnsm get         - get all items
+  cnsm list        - list all items
 
 Flags for 'add'
   -t, --type  - type of media to add
@@ -25,7 +23,7 @@ Flags for 'add'
 Flags for 'view'
   -f, --filter - filter to directly apply
 
-Flags for 'get'
+Flags for 'list'
   -f, --filter - filter items before returning them, strips type tag of results`,
     {
       description: "",
@@ -55,14 +53,9 @@ Flags for 'get'
   const args = cli.flags;
   args._ = cli.input;
 
-  // view
   if ( args._.length === 0 ) {
-    await view( args.filter );
-    return;
-  }
-
-  // add
-  if ( args._[0] === "add" ) {
+    view( args.filter );
+  } else if ( args._[0] === "add" ) {
     args._.shift();
 
     if ( !args.type || !dataTypes.includes( args.type ) ) {
@@ -85,30 +78,9 @@ Flags for 'get'
     if ( args.nf ) data.nf = args.nf;
     if ( args.desc ) data.desc = args.desc;
 
-    await add( data );
-  } else if ( args._[0] === "get" ) {
-    // get
-    (async function get() {
-          const filter = validateFilters( args.filter );
-
-      const data = await readConfig().then(
-        d => filter ?
-          d.filter( d => d.type === filter ) :
-          d
-      ).then( d => d.map( d => {
-        let res = d.name;
-        if ( d.desc ) {
-          res = `${res}: ${d.desc}`
-        }
-        if ( !filter ) {
-          res = `${res} [${d.type}]`
-        }
-        return res
-      } ) )
-
-      const dataToPrint = data.reduce( ( acc, cur ) => acc = `${acc}\n${cur}`, "" );
-      console.log(dataToPrint);
-    })()
+    add( data );
+  } else if ( args._[0] === "list" ) {
+    list( args.filter )
   } else {
     console.log( "Unknown command" );
     console.log( "  Try --help for help" );
