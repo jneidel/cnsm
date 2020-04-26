@@ -28,8 +28,8 @@ function validateItem( i: {
  */
 export default class ItemList {
   private list: Item[];
-  private filters: any[] = [];
 
+  /* list */
   // test use
   constructor( data: any[] = [] ) {
     const res: any = [];
@@ -43,6 +43,13 @@ export default class ItemList {
     this.list = list;
   }
 
+  get(): Item[] {
+    return this.filterList();
+  }
+
+  /* filters */
+  private filters: any[] = [];
+
   // Todo: add special prog filter
   private filterList(): Item[] {
     if ( this.hasFilters() ) {
@@ -51,9 +58,6 @@ export default class ItemList {
     } else {
       return this.list;
     }
-  }
-  get(): Item[] {
-    return this.filterList();
   }
 
   addFilter( filter: string|null ): void {
@@ -68,6 +72,7 @@ export default class ItemList {
     return !!this.filters.length;
   }
 
+  /* search */
   search( query: string ): Item[] {
     const regex = new RegExp( query, "i" );
 
@@ -82,5 +87,29 @@ export default class ItemList {
     } );
 
     return matches;
+  }
+
+  /* views */
+  private view: number = 0;
+  VIEW_RANGE: number = 10;
+
+  getView(): Item[] {
+    const start = ( range => range * this.VIEW_RANGE )( this.view );
+    const end = ( range => ( range + 1 ) * this.VIEW_RANGE )( this.view );
+    return this.get().slice( start, end );
+  }
+  increaseView(): void {
+    if ( this.get().length > ( this.view + 1 ) * this.VIEW_RANGE ) {
+      this.view++;
+    }
+    // Todo: send feedback to user
+  }
+  decreaseView(): void {
+    if ( this.view !== 0 ) {
+      this.view--;
+    }
+  }
+  resetView(): void {
+    this.view = 0;
   }
 }

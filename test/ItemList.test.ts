@@ -66,3 +66,77 @@ test( "filters for multiple mediums", () => {
   expect( list.get() ).toEqual( expected );
 } );
 
+// view
+const movieArr = [
+  { medium: "movie", name: "The Dark Knight" },
+  { medium: "movie", name: "Interstellar" },
+  { medium: "movie", name: "Forrest Gump" },
+  { medium: "movie", name: "Fantastic Mr Fox" },
+  { medium: "movie", name: "Enders Game" },
+  { medium: "movie", name: "The Matrix" },
+  { medium: "movie", name: "Clockwork Orange" },
+  { medium: "movie", name: "Fight Club" },
+  { medium: "movie", name: "Seven" },
+  { medium: "movie", name: "Gran Torino" },
+  { medium: "movie", name: "Hot Fuzz" },
+  { medium: "movie", name: "8 Mile" },
+  { medium: "movie", name: "Memento" },
+  { medium: "movie", name: "Lala Land" },
+  { medium: "movie", name: "The Revenant" },
+  { medium: "movie", name: "Shutter Island" },
+  { medium: "movie", name: "Kill Bill" },
+  { medium: "movie", name: "Pulp Fiction" },
+  { medium: "movie", name: "Death Proof" },
+  { medium: "movie", name: "Blade Runner" },
+  { medium: "movie", name: "The Big Short" },
+  { medium: "movie", name: "Citizenfour" },
+  { medium: "movie", name: "Death at a Funeral" },
+  { medium: "movie", name: "Tekkonkinkreet" },
+  { medium: "movie", name: "Sucker Punch" },
+  { medium: "movie", name: "Source Code" },
+];
+
+test( "default view returns correct list", () => {
+  const list = new ItemList( movieArr );
+  const expected = list.get().slice( 0, list.VIEW_RANGE );
+
+
+  expect( list.getView() ).toEqual( expected );
+} );
+
+test( "view=1 returns correct list", () => {
+  const list = new ItemList( movieArr );
+  const expected = list.get().slice( list.VIEW_RANGE, list.VIEW_RANGE *2 );
+
+  list.increaseView();
+
+  expect( list.getView() ).toEqual( expected );
+} );
+
+test( "increaseView not increasing over len of list", () => {
+  const list = new ItemList( movieArr.slice( 0, 4 ) );
+  const expected = list.get();
+
+  list.increaseView();
+
+  expect( list.getView() ).toEqual( expected );
+} );
+
+test( "decreaseView not decreaseing below 0", () => {
+  const list = new ItemList( movieArr.slice( 0, 4 ) );
+  const expected = list.get();
+
+  list.decreaseView();
+
+  expect( list.getView() ).toEqual( expected );
+} );
+
+test( "resetView", () => {
+  const list = new ItemList( movieArr );
+  const expected = list.get().slice( 0, list.VIEW_RANGE );
+
+  list.increaseView();
+  list.resetView();
+
+  expect( list.getView() ).toEqual( expected );
+} );
