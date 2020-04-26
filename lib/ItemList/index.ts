@@ -28,6 +28,7 @@ function validateItem( i: {
  */
 export default class ItemList {
   private list: Item[];
+  private filters: any[] = [];
 
   // test use
   constructor( data: any[] = [] ) {
@@ -37,19 +38,40 @@ export default class ItemList {
   }
 
   // normal use, can't be run in constructor bc of async
-  async setFromConfig(): Promise<void> {
+  async reloadFromConfig(): Promise<void> {
     const list = await readConfig();
     this.list = list;
   }
 
+  // Todo: add special prog filter
+  private filterList(): Item[] {
+    if ( this.hasFilters() ) {
+      return this.list
+        .filter( i => ~this.filters.indexOf( i.medium ) );
+    } else {
+      return this.list;
+    }
+  }
   get(): Item[] {
-    return this.list;
+    return this.filterList();
   }
 
-  search( query: string, list: Item[] = this.get() ): Item[] {
+  addFilter( filter: string|null ): void {
+    filter = validateFilter( filter );
+    if ( filter )
+      this.filters.push( filter );
+  }
+  clearFilters(): void {
+    this.filters = [];
+  }
+  hasFilters(): boolean {
+    return !!this.filters.length;
+  }
+
+  search( query: string ): Item[] {
     const regex = new RegExp( query, "i" );
 
-    const matches = list.filter( i => {
+    const matches = this.get().filter( i => {
       let valueToMatch = i.name;
 
       if ( i.medium == "article" ) {
@@ -60,14 +82,5 @@ export default class ItemList {
     } );
 
     return matches;
-  }
-
-  // Todo: add special prog filter
-  filter( rawFilters: any[] ): Item[] {
-    const filters = rawFilters
-      .map( f => validateFilter( f ) )
-      .filter( f => f != null );
-
-    return this.get().filter( i => ~[...filters].indexOf( i.medium ) );
   }
 }

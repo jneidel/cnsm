@@ -32,14 +32,13 @@ test( "searches only in desc for articles", () => {
 } );
 
 test( "search with passed along list", () => {
-  const itemList = new ItemList( [] );
-  const list = [
+  const list = new ItemList( [
     { medium: "movie", name: "Breakfast Club", desc: null, prog: null },
     { medium: "movie", name: "Ferris Bueller's Day Off", desc: null, prog: null },
-  ];
-  const expected = [ list[1] ];
+  ] );
+  const expected = [ list.get()[1] ];
 
-  expect( itemList.search( "Off", list ) ).toEqual( expected );
+  expect( list.search( "Off" ) ).toEqual( expected );
 } );
 
 // filter
@@ -49,9 +48,9 @@ test( "filters for single medium", () => {
     { medium: "movie", name: "Madeo" },
   ] );
   const expected = [ list.get()[0] ];
-  const filters = [ "series" ];
+  list.addFilter( "series" );
 
-  expect( list.filter( filters ) ).toEqual( expected );
+  expect( list.get() ).toEqual( expected );
 } );
 
 test( "filters for multiple mediums", () => {
@@ -61,8 +60,9 @@ test( "filters for multiple mediums", () => {
     { medium: "book", name: "Atomic Habits" },
   ] );
   const expected = [ list.get()[1], list.get()[2] ];
-  const filters = [ "MV", "b" ];
+  list.addFilter( "MV" );
+  list.addFilter( "b" );
 
-  expect( list.filter( filters ) ).toEqual( expected );
+  expect( list.get() ).toEqual( expected );
 } );
 
