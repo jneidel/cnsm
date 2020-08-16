@@ -79,7 +79,6 @@ Flags for 'list'
     console.log( "Unknown command" );
     console.log( "  Try --help for help" );
   }
-
 }
 
 main();
