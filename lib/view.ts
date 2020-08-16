@@ -10,19 +10,12 @@ export default async function view( passedFilter = null ) {
   mainList.addFilter( passedFilter );
 
   let currentView = 0;
-  let list = mainList.get();
+
+  // helper functions
   const draw = () => render( mainList, currentView );
+  const translateSelection = selected => currentView * 10 + Number( selected ) - 1;
+
   draw(); // initial rendering
-
-  const translateSelection = selected => {
-    let selectedIndex = currentView * 10 + Number( selected ) - 1;
-
-    // if ( filters.length ) {
-    //   selectedIndex = list.map( ( i, index ) => index )[selectedIndex]; // map what the user sees (& types) to the actual data
-    // }
-
-    return selectedIndex;
-  };
 
   // let previousDataFileModified: number | null = null;
   // ( function reloadOnFileChange() {
@@ -55,7 +48,8 @@ export default async function view( passedFilter = null ) {
   while ( true ) {
     const answer = await rlp.questionAsync( `${chalk.blue( "$" )} ` );
 
-    let [ command, selected, secondParam ] = [ ...answer.split( " " ) ];
+    // let [ command, selected, secondParam ] = [ ...answer.split( " " ) ];
+    let [ command, selected ] = [ ...answer.split( " " ) ];
     selected = selected === "0" ? 10 : selected;
 
     switch ( command ) {
@@ -66,7 +60,7 @@ export default async function view( passedFilter = null ) {
         break;
       case "next":
       case "n":
-        if ( list.length >= ( currentView + 1 ) * 10 ) {
+        if ( mainList.get().length >= ( currentView + 1 ) * 10 ) {
           currentView += 1;
           draw();
         } else
@@ -123,15 +117,13 @@ export default async function view( passedFilter = null ) {
         break;
       case "f":
       case "filter":
-        filters.push( selected );
+        mainList.addFilter( selected );
         currentView = 0;
-        list = mainList.filter( filters );
         draw();
         break;
       case "re":
       case "reset":
-        filters = [];
-        list = mainList.filter( filters );
+        mainList.clearFilters();
         draw();
         break;
       case "o":
@@ -152,33 +144,32 @@ export default async function view( passedFilter = null ) {
       case "remove":
       case "delete":
         selected = translateSelection( selected );
-        const removedName = list[selected].name;
+        // const removedName = list[selected].name;
         // Todo: implement deletion
-        list.splice( selected, 1 );
+        // list.splice( selected, 1 );
         draw();
-        console.log( `Removed ${selected + 1} (${removedName})` );
+        // console.log( `Removed ${selected + 1} (${removedName})` );
+        console.log( `Removed ${selected + 1} ()` );
         break;
       case "r":
       case "reload":
-        // Todo: refactor reload + reassign to list
-        await mainList.setFromConfig();
-        list = mainList.filter( filters );
+        await mainList.reloadFromConfig();
         draw();
         console.log( "Reloaded data file" );
         break;
-      case "g":
-      case "prog":
-        selected = translateSelection( selected );
-        list[selected].prog = secondParam;
-        console.log( `Setting progress for ${selected + 1} to ${secondParam}` );
-        break;
+      // case "g":
+      // case "prog":
+      //   selected = translateSelection( selected );
+      //   list[selected].prog = secondParam;
+      //   console.log( `Setting progress for ${selected + 1} to ${secondParam}` );
+      //   break;
       case "gg":
         currentView = 0;
         draw();
         console.log( "Back to first page" );
         break;
       case "G":
-        const lastView = Math.floor( list.length / 10 );
+        const lastView = Math.floor( mainList.get().length / 10 );
         currentView = lastView;
         draw();
         console.log( "Switched to last page of entries" );
