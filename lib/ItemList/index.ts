@@ -38,9 +38,13 @@ export default class ItemList {
   }
 
   // normal use, can't be run in constructor bc of async
-  async reloadFromConfig(): Promise<void> {
-    const list = await readConfig();
-    this.list = list;
+  public async reloadFromConfig(): Promise<void> {
+    const json = await readConfig();
+
+    const res: any = [];
+    json.forEach( i => res.push( validateItem( i ) ) ); // weird ts-jest error with reduce
+
+    this.list = res;
   }
 
   get(): Item[] {
