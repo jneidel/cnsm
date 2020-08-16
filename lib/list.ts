@@ -21,6 +21,6 @@ export default async function list( unvalidatedFilter = null ) {
       return res;
     } );
 
-  const dataToPrint = data.reduce( ( acc, cur ) => acc = `${acc}\n${cur}`, "" );
+  const dataToPrint = data.reduce( ( acc, cur ) => acc = `${acc}${acc ? "\n" : ""}${cur}`, "" );
   console.log( dataToPrint );
 }
