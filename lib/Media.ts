@@ -2,33 +2,32 @@ import chalk from "chalk";
 import childProcess from "child_process";
 
 export const dataTypes = [ "article", "series", "video", "movie", "manga", "comic", "anime", "file", "book", "art" ];
-interface MediaData {
-  name: string;
-  type: "article" | "series" | "video" | "movie" | "manga" | "comic" | "anime" | "file" | "book" | "art";
-  desc?: string;
-  nf?: boolean;
-  prog: number;
-}
+// interface MediaData {
+//   name: string;
+//   // medium: "article" | "series" | "video" | "movie" | "manga" | "comic" | "anime" | "file" | "book" | "art";
+//   medium: string;
+//   desc?: string;
+//   prog?: number;
+// }
 
 export default class Media {
   name: string;
-  type: string;
+  medium: string;
   desc = "";
-  nf = false;
   prog = 0;
 
-  constructor( data: MediaData ) {
+  // constructor( data: MediaData ) {
+  constructor( data ) {
     this.name = data.name;
-    this.type = data.type;
+    this.medium = data.medium;
 
-    this.nf = data.nf ? data.nf : this.nf;
     this.desc = data.desc ? data.desc : this.desc;
     this.prog = data.prog ? data.prog : this.prog;
   }
 
   // @ts-ignore
   translateType() {
-    switch ( this.type ) {
+    switch ( this.medium ) {
       case "article":
         return chalk.black.bgYellowBright( "AT" );
       case "series":
@@ -53,14 +52,14 @@ export default class Media {
   }
   private evalDescriptor() {
     // depending on type, display name or description
-    const { type } = this;
+    const { medium } = this;
     const description = this.desc;
     const { name } = this;
 
     if ( !description || description === "" )
       return name;
 
-    switch ( type ) { // description exists
+    switch ( medium ) { // description exists
       case "article":
       case "video":
       case "file":
@@ -89,13 +88,7 @@ export default class Media {
 
   // handle open command depending on type
   open() {
-    if ( this.nf ) {
-      childProcess.spawn( String( process.env.ALT_BROWSER ), [ `www.netflix.com/search?q=${encodeURIComponent( this.name )}` ] );
-      console.log( "Opened in netflix" );
-      return;
-    }
-
-    switch ( this.type ) {
+    switch ( this.medium ) {
       case "article":
       case "art":
       case "video":
@@ -129,7 +122,7 @@ export default class Media {
     }
   }
   altOpen() {
-    switch ( this.type ) {
+    switch ( this.medium ) {
       case "series":
       case "anime":
       case "movie":
