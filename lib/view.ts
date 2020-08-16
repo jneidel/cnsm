@@ -1,27 +1,25 @@
 // import Media from "./Media";
 import readline from "readline-promise";
 import chalk from "chalk";
-// import * as fs from "./fs";
 import render from "./render";
 import ItemList from "./ItemList";
 
 export default async function view( passedFilter = null ) {
   const mainList = new ItemList();
-  await mainList.setFromConfig();
+  await mainList.reloadFromConfig();
+  mainList.addFilter( passedFilter );
 
   let currentView = 0;
-  let filters = [ passedFilter ].filter( f => f != null );
-  let list = mainList.get(); // Todo: fix empty, null[] filters
-  const draw = () => render( list, filters, currentView );
-
+  let list = mainList.get();
+  const draw = () => render( mainList, currentView );
   draw(); // initial rendering
 
   const translateSelection = selected => {
     let selectedIndex = currentView * 10 + Number( selected ) - 1;
 
-    if ( filters.length ) {
-      selectedIndex = list.map( ( i, index ) => index )[selectedIndex]; // map what the user sees (& types) to the actual data
-    }
+    // if ( filters.length ) {
+    //   selectedIndex = list.map( ( i, index ) => index )[selectedIndex]; // map what the user sees (& types) to the actual data
+    // }
 
     return selectedIndex;
   };
