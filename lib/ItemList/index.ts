@@ -52,7 +52,7 @@ export default class ItemList {
   }
 
   /* filters */
-  private filters: any[] = [];
+  private filters: string[] = [];
 
   // Todo: add special prog filter
   private filterList(): Item[] {
@@ -74,6 +74,9 @@ export default class ItemList {
   }
   hasFilters(): boolean {
     return !!this.filters.length;
+  }
+  getFilters(): string[] {
+    return this.filters;
   }
 
   /* search */
