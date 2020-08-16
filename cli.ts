@@ -18,7 +18,6 @@ Usage
 Flags for 'add'
   -t, --type  - type of media to add
   -d, --desc  - alternative name or description if name is an url
-  --nf        - indicating that it is available on netflix
 
 Flags for 'view'
   -f, --filter - filter to directly apply
@@ -36,10 +35,6 @@ Flags for 'list'
           alias  : "d",
           type   : "string",
           default: null,
-        },
-        nf: {
-          type   : "boolean",
-          default: false,
         },
         filter: {
           alias  : "f",
@@ -75,7 +70,6 @@ Flags for 'list'
       type: args.type,
     };
 
-    if ( args.nf ) data.nf = args.nf;
     if ( args.desc ) data.desc = args.desc;
 
     add( data );
