@@ -1,13 +1,10 @@
-import { validateFilter } from "./validateFilter";
 import ItemList from "./ItemList";
 
 export default async function list( unvalidatedFilter = null ) {
-  const filter = validateFilter( unvalidatedFilter );
-
   const list = new ItemList();
   await list.reloadFromConfig();
 
-  list.addFilter( filter );
+  list.addFilter( unvalidatedFilter );
   const data = list.get()
     .map( d => {
       let res = d.name;
@@ -15,7 +12,7 @@ export default async function list( unvalidatedFilter = null ) {
       if ( d.desc )
         res = `${res}: ${d.desc}`;
 
-      if ( !filter )
+      if ( list.getFilters().length )
         res = `${res} [${d.medium}]`;
 
       return res;

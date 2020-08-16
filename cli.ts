@@ -20,10 +20,14 @@ Flags for 'add'
   -d, --desc  - alternative name or description if name is an url
 
 Flags for 'view'
-  -f, --filter - filter to directly apply
+  -f, --filter - filter to directly apply (single or comma-separated list)
 
 Flags for 'list'
-  -f, --filter - filter items before returning them, strips type tag of results`,
+  -f, --filter - filter items before returning them, strips type tag of results
+
+Examples:
+  $ cnsm list -f 'mv,b'
+  #=> lists all movies and books`,
     {
       description: "",
       flags      : {

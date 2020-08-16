@@ -65,9 +65,20 @@ export default class ItemList {
   }
 
   addFilter( filter: string|null ): void {
-    filter = validateFilter( filter );
-    if ( filter )
-      this.filters.push( filter );
+    if ( String( filter ).match( /,/ ) ) { // passed -f "filter,filter,etc."
+      String( filter )
+        .split(",")
+        .map( s => s.trim() )
+        .map( s => validateFilter( s ) )
+        .forEach( f => {
+          if ( f )
+            this.filters.push( f )
+        } );
+    } else {
+      filter = validateFilter( filter );
+      if ( filter )
+        this.filters.push( filter );
+    }
   }
   clearFilters(): void {
     this.filters = [];
