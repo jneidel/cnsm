@@ -1,8 +1,9 @@
 import chalk from "chalk";
 import Media from "./Media";
+import ItemList from "./ItemList";
 
-export default function render( data, filters, range = 0 ) {
-  data = data.map( d => new Media( d ) );
+export default function render( list: ItemList, range = 0 ) {
+  const data = list.get().map( d => new Media( d ) );
 
   const start = ( range => range * 10 )( range );
   const end = ( range => ( range + 1 ) * 10 )( range );
@@ -15,6 +16,7 @@ export default function render( data, filters, range = 0 ) {
         `-${data.length}` :
       `-${end}`;
 
+  const filters = list.getFilters();
   const filterDisplay = filters.length ? `, ${chalk.green( "Filter:" )} ${filters}` : "";
 
   const output: string = currentSelection
