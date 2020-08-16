@@ -63,11 +63,12 @@ Flags for 'list'
     if ( args._.length === 0 ) {
       console.log( "A name is required." );
       console.log( "  Try --help for help" );
+      process.exit();
     }
 
     const data: any = {
       name: args._.join( " " ),
-      type: args.type,
+      medium: args.type,
     };
 
     if ( args.desc ) data.desc = args.desc;
