@@ -3,6 +3,7 @@ import readline from "readline-promise";
 import chalk from "chalk";
 import render from "./render";
 import ItemList from "./ItemList";
+import { dataTypes } from "./Media";
 
 export default async function view( passedFilter = null ) {
   const mainList = new ItemList();
@@ -65,7 +66,6 @@ export default async function view( passedFilter = null ) {
           draw();
         } else
           console.log( "Reached last page of entries" );
-
         break;
       case "previous":
       case "prev":
@@ -77,7 +77,6 @@ export default async function view( passedFilter = null ) {
           currentView -= 1;
           draw();
         }
-
         break;
       case "exit":
         process.exit();
@@ -93,25 +92,37 @@ export default async function view( passedFilter = null ) {
       case "help":
         console.log( `${chalk.green( "Available commands:" )}
   ls, list   - list entries
+
+Moving around:
   n,  next   - view next 10 entries
   p,  prev   - view previous 10 entries
-  f,  filter - filter by type (usage: $ f C; $ filter manga)
-  re, reset  - reset filter
-  r,  reload - reload data file
-
-  o,  open   - open with default handler for type (definitions found in lib/Media.ts)
-                 example: manga searches for the title on mangalife.us in $BROWSER
-  a,  alt    - open with alternative handler (same principle as open)
-                 example: movie search for the title on imdb.com in $BROWSER
-
-  g,  prog   - set progress for selected (usage: $ prog 3 65)
-
   gg         - goto first page of entries
   G          - goto last page of entries
 
+Filtering:
+  f,  filter - filter by type
+               either with the full type, or shorthand
+               examples: $ f books; f b; f b,mv
+  re, reset  - reset filters
+
+Handler/openers (open with a handler defined by type):
+  o,  open   - open with default handler
+               example: manga searches on mangalife.us
+  a,  alt    - open with alternative handler
+               example: movie searches on imdb.com
+
+Saving/exiting:
+      reload - reload from file (disregarding all changes)
   w,  write  - write changes
   q,  wq     - write changes and quit
-      exit   - exit without writing` );
+      exit   - exit without writing
+
+Help:
+      help   - this menu
+      types  - list all available types
+
+?  g,  prog   - set progress for selected (usage: $ prog 3 65)
+` );
         break;
       case "f":
       case "filter":
@@ -146,7 +157,6 @@ export default async function view( passedFilter = null ) {
         draw();
         console.log( `Removed ${selected + 1} (${removeEntry.desc ? removeEntry.desc : removeEntry.name})` );
         break;
-      case "r":
       case "reload":
         await mainList.reloadFromConfig();
         draw();
@@ -168,6 +178,9 @@ export default async function view( passedFilter = null ) {
         currentView = lastView;
         draw();
         console.log( "Switched to last page of entries" );
+      case "types":
+        console.log( "Available data types for filtering:" );
+        console.log( dataTypes );
     }
   }
 }
