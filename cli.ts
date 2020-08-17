@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 import meow from "meow";
-import { dataTypes } from "./lib/Media";
+import { dataTypes } from "./lib/types";
 import view from "./lib/view";
 import add from "./lib/add";
 import list from "./lib/list";
@@ -60,7 +60,7 @@ Examples:
     if ( !args.type || !dataTypes.includes( args.type ) ) {
       console.log( "A media type is required." );
       console.log( "Available:" );
-      console.log( dataTypes );
+      console.log( dataTypes.sort() );
       process.exit();
     }
 

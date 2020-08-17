@@ -3,7 +3,7 @@ import readline from "readline-promise";
 import chalk from "chalk";
 import render from "./render";
 import ItemList from "./ItemList";
-import { dataTypes } from "./Media";
+import { dataTypes } from "./types";
 
 export default async function view( passedFilter = null ) {
   const list = new ItemList();
@@ -180,7 +180,7 @@ Help:
         console.log( "Switched to last page of entries" );
       case "types":
         console.log( "Available data types for filtering:" );
-        console.log( dataTypes );
+        console.log( dataTypes.sort() );
     }
   }
 }
