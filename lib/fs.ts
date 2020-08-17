@@ -7,7 +7,7 @@ const mkdir = promisify( fs.mkdir );
 
 export const configDir = `${process.env.HOME}/.config/cnsm`;
 const dataFile = `${configDir}/data.json`;
-const typesFile = `${configDir}/types.json`;
+export const typesFile = `${configDir}/types.json`;
 
 export async function readData() {
   await mkdir( configDir, { recursive: true } );

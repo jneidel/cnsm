@@ -1,5 +1,6 @@
 import { readData, writeData } from "../fs";
 import { validateFilter } from "../validateFilter";
+import { dataTypes } from "../types";
 
 type Item = {
   name: string;
@@ -14,13 +15,16 @@ function validateItem( i: {
     desc?: string;
     prog?: number;
   } ) {
-  const item: Item = {
-    name: i.name,
-    medium: i.medium,
-    desc: i.desc || null,
-    prog: i.prog || null,
-  };
-  return item;
+  if ( ~dataTypes.indexOf( i.medium ) ) {
+    const item: Item = {
+      name: i.name,
+      medium: i.medium,
+      desc: i.desc || null,
+      prog: i.prog || null,
+    };
+    return item;
+  } else
+    return null;
 }
 
 /* Main class for interacting with the data list
@@ -32,8 +36,9 @@ export default class ItemList {
   /* list */
   // test use
   constructor( data: any[] = [] ) {
-    const res: any = [];
-    data.forEach( i => res.push( validateItem( i ) ) ); // weird ts-jest error with reduce
+    const res: any = data
+      .map( i => validateItem( i ) )
+      .filter( i => i != null );
     this.list = res;
   }
 
@@ -41,9 +46,9 @@ export default class ItemList {
   public async reloadFromFile(): Promise<void> {
     const json = await readData();
 
-    const res: any = [];
-    json.forEach( i => res.push( validateItem( i ) ) ); // weird ts-jest error with reduce
-
+    const res: any = json
+      .map( i => validateItem( i ) )
+      .filter( i => i != null );
     this.list = res;
   }
 

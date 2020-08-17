@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import childProcess from "child_process";
+import * as types from "./types";
 
 export default class Media {
   name: string;
@@ -18,28 +19,29 @@ export default class Media {
 
   // @ts-ignore
   translateType() {
-    switch ( this.medium ) {
-      case "article":
-        return chalk.black.bgYellowBright( "AT" );
-      case "series":
-        return chalk.black.bgBlue( "S" );
-      case "video":
-        return chalk.black.bgGreen( "V" );
-      case "movie":
-        return chalk.bgBlue( "MV" );
-      case "manga":
-        return chalk.bgRed( "MA" );
-      case "comic":
-        return chalk.black.bgRed( "C" );
-      case "anime":
-        return chalk.black.bgCyan( "AN" );
-      case "file":
-        return chalk.black.bgMagenta( "F" );
-      case "book":
-        return chalk.red.bgYellow( "B" );
-      case "art":
-        return chalk.green.bgRed( "AR" );
-    }
+    return types.colorType( this.medium );
+    // switch ( this.medium ) {
+    //   case "article":
+    //     return chalk.black.bgYellowBright( "AT" );
+    //   case "series":
+    //     return chalk.black.bgBlue( "S" );
+    //   case "video":
+    //     return chalk.black.bgGreen( "V" );
+    //   case "movie":
+    //     return chalk.bgBlue( "MV" );
+    //   case "manga":
+    //     return chalk.bgRed( "MA" );
+    //   case "comic":
+    //     return chalk.black.bgRed( "C" );
+    //   case "anime":
+    //     return chalk.black.bgCyan( "AN" );
+    //   case "file":
+    //     return chalk.black.bgMagenta( "F" );
+    //   case "book":
+    //     return chalk.red.bgYellow( "B" );
+    //   case "art":
+    //     return chalk.green.bgRed( "AR" );
+    // }
   }
   private evalDescriptor() {
     // depending on type, display name or description
