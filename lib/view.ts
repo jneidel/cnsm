@@ -6,14 +6,14 @@ import ItemList from "./ItemList";
 import { dataTypes } from "./Media";
 
 export default async function view( passedFilter = null ) {
-  const mainList = new ItemList();
-  await mainList.reloadFromFile();
-  mainList.addFilter( passedFilter );
+  const list = new ItemList();
+  await list.reloadFromFile();
+  list.addFilter( passedFilter );
 
   let currentView = 0;
 
   // helper functions
-  const draw = () => render( mainList, currentView );
+  const draw = () => render( list, currentView );
   const translateSelection = selected => currentView * 10 + Number( selected ) - 1;
 
   draw(); // initial rendering
@@ -27,8 +27,8 @@ export default async function view( passedFilter = null ) {
   //       previousDataFileModified &&
   //       previousDataFileModified < currentDataFileModified
   //     ) {
-  //       await mainList.setFromConfig();
-  //       list = mainList.filter( filters );
+  //       await list.setFromConfig();
+  //       list = list.filter( filters );
   //       draw();
   //       process.stdout.write( `Automatic reload (data file changed in background)
 // ${chalk.blue( "$ " )}` );
@@ -61,7 +61,7 @@ export default async function view( passedFilter = null ) {
         break;
       case "next":
       case "n":
-        if ( mainList.get().length >= ( currentView + 1 ) * 10 ) {
+        if ( list.get().length >= ( currentView + 1 ) * 10 ) {
           currentView += 1;
           draw();
         } else
@@ -82,11 +82,11 @@ export default async function view( passedFilter = null ) {
         process.exit();
       case "q":
       case "wq":
-        mainList.write();
+        list.write();
         process.exit();
       case "w":
       case "write":
-        mainList.write();
+        list.write();
         // previousDataFileModified = await fs.getDataFileModified();
         break;
       case "help":
@@ -126,13 +126,13 @@ Help:
         break;
       case "f":
       case "filter":
-        mainList.addFilter( selected );
+        list.addFilter( selected );
         currentView = 0;
         draw();
         break;
       case "re":
       case "reset":
-        mainList.clearFilters();
+        list.clearFilters();
         draw();
         break;
       case "o":
@@ -153,12 +153,12 @@ Help:
       case "remove":
       case "delete":
         selected = translateSelection( selected );
-        const removeEntry = mainList.remove( selected );
+        const removeEntry = list.remove( selected );
         draw();
         console.log( `Removed ${selected + 1} (${removeEntry.desc ? removeEntry.desc : removeEntry.name})` );
         break;
       case "reload":
-        await mainList.reloadFromFile();
+        await list.reloadFromFile();
         draw();
         console.log( "Reloaded data file" );
         break;
@@ -174,7 +174,7 @@ Help:
         console.log( "Back to first page" );
         break;
       case "G":
-        const lastView = Math.floor( mainList.get().length / 10 );
+        const lastView = Math.floor( list.get().length / 10 );
         currentView = lastView;
         draw();
         console.log( "Switched to last page of entries" );
