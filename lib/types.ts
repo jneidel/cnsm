@@ -1,5 +1,7 @@
+// import chalk from "chalk";
 import { readTypes } from "./fs";
 
 const types = readTypes();
 
-export const dataTypes = types.map( t => t.name );
+export const dataTypes = Object.keys( types );
+

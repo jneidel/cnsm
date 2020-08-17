@@ -36,15 +36,15 @@ export function writeData( data ) { // exit handler can't handle async
 
 export function readTypes() { // sync to read it at the top of types.ts (only called 1x)
   const rawTypes = fs.readFileSync( typesFile, { encoding: "utf-8" } );
-  let types: any[];
+  let types: any; // {}
   try {
     types = JSON.parse( rawTypes );
-    if ( !types.length ) { // not an array
-      types = [ types ];
-      console.error( `Types file (${typesFile}) is not an array` );
+    if ( types.length ) { // not an array
+      types = {};
+      console.error( `Types file (${typesFile}) is not an object` );
     }
   } catch( e ) {
-    types = [];
+    types = {};
     console.error( `Types file (${typesFile}) is invalid JSON` );
   }
   return types;
