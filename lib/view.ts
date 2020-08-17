@@ -7,7 +7,7 @@ import { dataTypes } from "./Media";
 
 export default async function view( passedFilter = null ) {
   const mainList = new ItemList();
-  await mainList.reloadFromConfig();
+  await mainList.reloadFromFile();
   mainList.addFilter( passedFilter );
 
   let currentView = 0;
@@ -158,7 +158,7 @@ Help:
         console.log( `Removed ${selected + 1} (${removeEntry.desc ? removeEntry.desc : removeEntry.name})` );
         break;
       case "reload":
-        await mainList.reloadFromConfig();
+        await mainList.reloadFromFile();
         draw();
         console.log( "Reloaded data file" );
         break;

@@ -2,7 +2,7 @@ import ItemList from "./ItemList";
 
 export default async function list( unvalidatedFilter = null ) {
   const list = new ItemList();
-  await list.reloadFromConfig();
+  await list.reloadFromFile();
 
   list.addFilter( unvalidatedFilter );
   const data = list.get()

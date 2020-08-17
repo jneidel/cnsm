@@ -8,7 +8,7 @@ const stat = promisify( fs.stat );
 export const configDir = `${process.env.HOME}/.config/cnsm`;
 const dataFile = `${configDir}/data.json`;
 
-export async function readConfig() {
+export async function readData() {
   await mkdir( configDir );
 
   const data = await readFile( dataFile, { encoding: "utf-8" } )
@@ -19,7 +19,7 @@ export async function readConfig() {
   return data;
 }
 
-export function writeConfig( data ) { // exit handler can't handle async
+export function writeData( data ) { // exit handler can't handle async
   console.log( `Writing changes to ${dataFile}` );
 
   data = data.map( item => {

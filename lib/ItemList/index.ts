@@ -1,4 +1,4 @@
-import { readConfig, writeConfig } from "../fs";
+import { readData, writeData } from "../fs";
 import { validateFilter } from "../validateFilter";
 
 type Item = {
@@ -38,8 +38,8 @@ export default class ItemList {
   }
 
   // normal use, can't be run in constructor bc of async
-  public async reloadFromConfig(): Promise<void> {
-    const json = await readConfig();
+  public async reloadFromFile(): Promise<void> {
+    const json = await readData();
 
     const res: any = [];
     json.forEach( i => res.push( validateItem( i ) ) ); // weird ts-jest error with reduce
@@ -103,7 +103,7 @@ export default class ItemList {
 
   /* fs */
   write(): void {
-    writeConfig( this.list );
+    writeData( this.list );
   }
 
   /* search */
