@@ -34,10 +34,19 @@ export function writeData( data ) { // exit handler can't handle async
   fs.writeFileSync( dataFile, json );
 }
 
-export async function readTypes() {
-  const types = await readFile( typesFile, { encoding: "utf-8" } )
-    .then( raw => JSON.parse( raw ) )
-    .catch( err => [] ); // file does not exist
+export function readTypes() { // sync to read it at the top of types.ts (only called 1x)
+  const rawTypes = fs.readFileSync( typesFile, { encoding: "utf-8" } );
+  let types: any[];
+  try {
+    types = JSON.parse( rawTypes );
+    if ( !types.length ) { // not an array
+      types = [ types ];
+      console.error( `Types file (${typesFile}) is not an array` );
+    }
+  } catch( e ) {
+    types = [];
+    console.error( `Types file (${typesFile}) is invalid JSON` );
+  }
   return types;
 }
 
