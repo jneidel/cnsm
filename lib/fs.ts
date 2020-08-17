@@ -1,15 +1,15 @@
-import mkdir from "make-dir";
 import * as fs from "fs";
 import { promisify } from "util";
 
 const readFile = promisify( fs.readFile );
 const stat = promisify( fs.stat );
+const mkdir = promisify( fs.mkdir );
 
 export const configDir = `${process.env.HOME}/.config/cnsm`;
 const dataFile = `${configDir}/data.json`;
 
 export async function readData() {
-  await mkdir( configDir );
+  await mkdir( configDir, { recursive: true } );
 
   const data = await readFile( dataFile, { encoding: "utf-8" } )
     .then( raw => JSON.parse( raw ) )
