@@ -90,6 +90,17 @@ export default class ItemList {
     return this.filters;
   }
 
+  /* remove */
+  remove( index: number ): Item {
+    // refactor: translate index yourself once view has been implemented
+    const removeObj = this.get()[index];
+
+    const mainIndex = this.list.indexOf( removeObj );
+    this.list.splice( mainIndex, 1 );
+
+    return removeObj;
+  }
+
   /* search */
   search( query: string ): Item[] {
     const regex = new RegExp( query, "i" );
@@ -111,7 +122,7 @@ export default class ItemList {
   private view: number = 0;
   VIEW_RANGE: number = 10;
 
-  getView(): Item[] {
+  drawView(): Item[] {
     const start = ( range => range * this.VIEW_RANGE )( this.view );
     const end = ( range => ( range + 1 ) * this.VIEW_RANGE )( this.view );
     return this.get().slice( start, end );

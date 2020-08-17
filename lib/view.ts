@@ -144,12 +144,9 @@ export default async function view( passedFilter = null ) {
       case "remove":
       case "delete":
         selected = translateSelection( selected );
-        // const removedName = list[selected].name;
-        // Todo: implement deletion
-        // list.splice( selected, 1 );
+        const removeEntry = mainList.remove( selected );
         draw();
-        // console.log( `Removed ${selected + 1} (${removedName})` );
-        console.log( `Removed ${selected + 1} ()` );
+        console.log( `Removed ${selected + 1} (${removeEntry.desc ? removeEntry.desc : removeEntry.name})` );
         break;
       case "r":
       case "reload":
