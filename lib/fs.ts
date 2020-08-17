@@ -22,6 +22,15 @@ export async function readConfig() {
 export function writeConfig( data ) { // exit handler can't handle async
   console.log( `Writing changes to ${dataFile}` );
 
+  data = data.map( item => {
+    if ( !item.desc )
+      delete item.desc
+    if ( !item.prog )
+      delete item.prog
+
+    return item;
+  } )
+
   const json = JSON.stringify( data, null, 2 );
   fs.writeFileSync( dataFile, json );
 }

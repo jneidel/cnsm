@@ -1,4 +1,4 @@
-import { readConfig } from "../fs";
+import { readConfig, writeConfig } from "../fs";
 import { validateFilter } from "../validateFilter";
 
 type Item = {
@@ -99,6 +99,11 @@ export default class ItemList {
     this.list.splice( mainIndex, 1 );
 
     return removeObj;
+  }
+
+  /* fs */
+  write(): void {
+    writeConfig( this.list );
   }
 
   /* search */

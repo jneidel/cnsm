@@ -83,13 +83,11 @@ export default async function view( passedFilter = null ) {
         process.exit();
       case "q":
       case "wq":
-        // Todo: implement writing
-        // fs.writeConfig( data );
+        mainList.write();
         process.exit();
       case "w":
       case "write":
-        // Todo: implement writing
-        // fs.writeConfig( data );
+        mainList.write();
         // previousDataFileModified = await fs.getDataFileModified();
         break;
       case "help":
