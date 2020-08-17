@@ -7,15 +7,14 @@ const mkdir = promisify( fs.mkdir );
 
 export const configDir = `${process.env.HOME}/.config/cnsm`;
 const dataFile = `${configDir}/data.json`;
+const typesFile = `${configDir}/types.json`;
 
 export async function readData() {
   await mkdir( configDir, { recursive: true } );
 
   const data = await readFile( dataFile, { encoding: "utf-8" } )
     .then( raw => JSON.parse( raw ) )
-    .catch( err => { // file does not exist
-      return [];
-    } );
+    .catch( err => [] ); // file does not exist
   return data;
 }
 
@@ -33,6 +32,13 @@ export function writeData( data ) { // exit handler can't handle async
 
   const json = JSON.stringify( data, null, 2 );
   fs.writeFileSync( dataFile, json );
+}
+
+export async function readTypes() {
+  const types = await readFile( typesFile, { encoding: "utf-8" } )
+    .then( raw => JSON.parse( raw ) )
+    .catch( err => [] ); // file does not exist
+  return types;
 }
 
 export function getDataFileModified() {
