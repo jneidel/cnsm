@@ -13,6 +13,7 @@ npm run link
 
 See `--help` and in view mode `help`.
 
+<!--
 ## Adding a new type
 
 - Add it to the `MediaData` type in `lib/Media.ts`
@@ -20,3 +21,8 @@ See `--help` and in view mode `help`.
 - Add whever the descriptor or the name is the list display value to the switch in `evalDescriptor` of `lib/Media.ts`
 - Add the default thing to do with the `name` in `open` of `lib/Media.ts`
 - Add type to filter validation in `lib/render.ts` in `validateFilters`
+-->
+
+## Configuration
+
+[See examples](example_config)

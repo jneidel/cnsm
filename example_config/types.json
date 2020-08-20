@@ -1,0 +1,34 @@
+{
+  "comic": {
+    "short": "c",
+    "front": "black",
+    "back": "red",
+    "open": "https://getcomics.info/?s=%s",
+    "open_name": "getcomics"
+  },
+  "series": {
+    "short": "s",
+    "front": "black",
+    "back": "blue",
+    "open": "https://jneidel.com/re/tpb/%s",
+    "open_name": "tpb",
+    "alt": "https://www.imdb.com/find?s=all&q=%s",
+    "alt_name": "imdb"
+  },
+  "book": {
+    "short": "b",
+    "front": "red",
+    "back": "yellow",
+    "open": "https://jneidel.com/re/lg/%s",
+    "open_name": "libgen",
+    "alt": "https://www.goodreads.com/search?q=%s",
+    "alt_name": "goodreads"
+  },
+  "art": {
+    "short": "ar",
+    "front": "green",
+    "back": "red",
+    "open": "name",
+    "primary_desc": true
+  }
+}
