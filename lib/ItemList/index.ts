@@ -6,21 +6,18 @@ type Item = {
   name: string;
   medium: string;
   desc: string | null;
-  prog: number | null;
 }
 
 function validateItem( i: {
     name: string;
     medium: string;
     desc?: string;
-    prog?: number;
   } ) {
   if ( ~dataTypes.indexOf( i.medium ) ) {
     const item: Item = {
       name: i.name,
       medium: i.medium,
       desc: i.desc || null,
-      prog: i.prog || null,
     };
     return item;
   } else
@@ -59,7 +56,6 @@ export default class ItemList {
   /* filters */
   private filters: string[] = [];
 
-  // Todo: add special prog filter
   private filterList(): Item[] {
     if ( this.hasFilters() ) {
       return this.list

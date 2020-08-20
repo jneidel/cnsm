@@ -5,7 +5,6 @@ export default class Media {
   name: string;
   medium: string;
   desc = "";
-  prog = 0;
 
   // constructor( data: MediaData ) {
   constructor( data ) {
@@ -13,7 +12,6 @@ export default class Media {
     this.medium = data.medium;
 
     this.desc = data.desc ? data.desc : this.desc;
-    this.prog = data.prog ? data.prog : this.prog;
   }
 
   translateType() {
@@ -26,7 +24,7 @@ export default class Media {
 
   toString( index = 0 ) {
     index = index === 9 ? 0 : index + 1;
-    return `${chalk.yellow( String( index ) )}: ${this.translateType()} - ${this.evalDescriptor()}${this.prog ? chalk.cyan( ` ${this.prog}%` ) : ""}`;
+    return `${chalk.yellow( String( index ) )}: ${this.translateType()} - ${this.evalDescriptor()}`;
   }
 
   // handle open command depending on type

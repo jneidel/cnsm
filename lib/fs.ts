@@ -24,8 +24,6 @@ export function writeData( data ) { // exit handler can't handle async
   data = data.map( item => {
     if ( !item.desc )
       delete item.desc
-    if ( !item.prog )
-      delete item.prog
 
     return item;
   } )

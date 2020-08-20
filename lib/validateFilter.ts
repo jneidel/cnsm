@@ -36,9 +36,6 @@ export function validateFilter( filterCategory: string | null ) {
     case "b":
     case "book":
       return "book";
-    case "g":
-    case "prog":
-      return "prog";
     case "AR":
     case "ar":
     case "art":

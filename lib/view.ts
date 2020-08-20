@@ -49,7 +49,6 @@ export default async function view( passedFilter = null ) {
   while ( true ) {
     const answer = await rlp.questionAsync( `${chalk.blue( "$" )} ` );
 
-    // let [ command, selected, secondParam ] = [ ...answer.split( " " ) ];
     let [ command, selected ] = [ ...answer.split( " " ) ];
     selected = selected === "0" ? 10 : selected;
 
@@ -120,8 +119,6 @@ Saving/exiting:
 Help:
       help   - this menu
       types  - list all available types
-
-?  g,  prog   - set progress for selected (usage: $ prog 3 65)
 ` );
         break;
       case "f":
@@ -159,12 +156,6 @@ Help:
         draw();
         console.log( "Reloaded data file" );
         break;
-      // case "g":
-      // case "prog":
-      //   selected = translateSelection( selected );
-      //   list[selected].prog = secondParam;
-      //   console.log( `Setting progress for ${selected + 1} to ${secondParam}` );
-      //   break;
       case "gg":
         currentView = 0;
         draw();
