@@ -138,15 +138,12 @@ Help:
       case "o":
       case "open":
         selected = translateSelection( selected );
-        // Todo: fix media
-        // media = new Media( list[selected] );
-        // media.open();
+        list.open( selected );
         break;
       case "a":
       case "alt":
         selected = translateSelection( selected );
-        // media = new Media( list[selected] );
-        // media.altOpen();
+        list.altOpen( selected );
         break;
       case "d":
       case "rm":

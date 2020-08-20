@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import childProcess from "child_process";
 import { readTypes, typesFile } from "./fs";
 
 const types = readTypes();
@@ -15,12 +16,17 @@ for ( const t in types ) { // check requirements
 
 export const dataTypes = Object.keys( types );
 
-export function colorType( typeStr: string ): string {
-  const typeObj = types[typeStr];
+function validateType( typeStr: string ): any {
+   const typeObj = types[typeStr];
   if ( !typeObj ) {
     console.error( "Using unsupported type:", typeStr );
     process.exit();
   }
+  return typeObj;
+}
+
+export function colorType( typeStr: string ): string {
+  const typeObj = validateType( typeStr );
   const typeStrUpper = typeObj.short.toUpperCase();
   const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
   let coloredType: string;
@@ -44,14 +50,45 @@ export function colorType( typeStr: string ): string {
 }
 
 export function evalItemName( item: any ): string {
-   const typeObj = types[item.medium];
-  if ( !typeObj ) {
-    console.error( "Using unsupported type:", item.medium );
-    process.exit();
-  }
+  const typeObj = validateType( item.medium );
 
   if ( !item.desc || item.desc === "" )
     return item.name;
 
   return typeObj.primary_desc ? item.desc : `${item.name} (${item.desc})`;
+}
+
+function openInBrowser( url: string ) {
+  childProcess.spawn( String( process.env.BROWSER ), [ url ] );
+}
+
+export function open( item: any ): void {
+  const typeObj = validateType( item.medium );
+  const url = typeObj.open === "name" ? // name is an url, like with all primary_desc items
+    item.name :
+    typeObj.open.replace( /%s/, encodeURIComponent( item.name ) );
+
+  openInBrowser( url );
+
+  const logMsg = typeObj.open_name ?
+    `Opened using in ${typeObj.open_name}` :
+    `Opened in browser`;
+  console.log( logMsg );
+}
+
+export function altOpen( item: any ): void {
+  const typeObj = validateType( item.medium );
+  if ( !typeObj.alt ) {
+    console.log( `Type ${item.medium} has no alternative handler` );
+    return;
+  }
+
+  const url = typeObj.alt.replace( /%s/, encodeURIComponent( item.name ) );
+
+  openInBrowser( url );
+
+  const logMsg = typeObj.alt_name ?
+    `Opened using in ${typeObj.alt_name}` :
+    `Opened in browser`;
+  console.log( logMsg );
 }

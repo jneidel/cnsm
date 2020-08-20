@@ -1,6 +1,6 @@
 import { readData, writeData } from "../fs";
 import { validateFilter } from "../validateFilter";
-import { dataTypes } from "../types";
+import { dataTypes, open, altOpen } from "../types";
 
 type Item = {
   name: string;
@@ -109,6 +109,15 @@ export default class ItemList {
   /* fs */
   write(): void {
     writeData( this.list );
+  }
+
+  open( index: number ): void {
+    const item = this.get()[index];
+    open( item );
+  }
+  altOpen( index: number ): void {
+    const item = this.get()[index];
+    altOpen( item );
   }
 
   /* search */
