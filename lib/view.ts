@@ -166,9 +166,11 @@ Help:
         currentView = lastView;
         draw();
         console.log( "Switched to last page of entries" );
+        break;
       case "types":
         console.log( "Available data types for filtering:" );
         console.log( dataTypes.sort() );
+        break;
     }
   }
 }
