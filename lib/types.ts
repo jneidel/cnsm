@@ -42,3 +42,16 @@ export function colorType( typeStr: string ): string {
 
   return coloredType;
 }
+
+export function evalItemName( item: any ): string {
+   const typeObj = types[item.medium];
+  if ( !typeObj ) {
+    console.error( "Using unsupported type:", item.medium );
+    process.exit();
+  }
+
+  if ( !item.desc || item.desc === "" )
+    return item.name;
+
+  return typeObj.primary_desc ? item.desc : `${item.name} (${item.desc})`;
+}
