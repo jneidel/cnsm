@@ -94,14 +94,19 @@ export default class ItemList {
   }
 
   /* remove */
-  remove( index: number ): Item {
-    // refactor: translate index yourself once view has been implemented
-    const removeObj = this.get()[index];
+  remove( inputIndex: number ) {
+    const index = this.translateIndexToView( inputIndex );
+    if ( index === null ) {
+      console.error( "Invalid index passed, no such item available" );
+    } else {
+      const removeObj = this.get()[index];
 
-    const mainIndex = this.list.indexOf( removeObj );
-    this.list.splice( mainIndex, 1 );
+      const mainIndex = this.list.indexOf( removeObj );
+      this.list.splice( mainIndex, 1 );
 
-    return removeObj;
+      this.drawView();
+      console.log( `Removed ${inputIndex + 1} (${removeObj.desc ? removeObj.desc : removeObj.name})` );
+    }
   }
 
   /* fs */
@@ -109,13 +114,20 @@ export default class ItemList {
     writeData( this.list );
   }
 
+  private opener( inputIndex: number, func ) {
+    const index = this.translateIndexToView( inputIndex );
+    if ( index === null ) {
+      console.error( "Invalid index passed, no such item available" );
+    } else {
+      const item = this.get()[index];
+      func( item );
+    }
+  }
   open( index: number ): void {
-    const item = this.get()[index];
-    open( item );
+    this.opener( index, open );
   }
   altOpen( index: number ): void {
-    const item = this.get()[index];
-    altOpen( item );
+    this.opener( index, altOpen );
   }
 
   /* random */
@@ -193,5 +205,11 @@ export default class ItemList {
   lastView(): void {
     this.view = Math.floor( this.get().length / this.VIEW_RANGE );
     this.drawView();
+  }
+  private translateIndexToView( input: number ): number|null {
+    if ( input > 10 || input < 1 ) {
+      return null;
+    }
+    return this.view * this.VIEW_RANGE + Number( input ) - 1;
   }
 }

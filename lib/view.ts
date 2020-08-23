@@ -8,12 +8,6 @@ export default async function view( passedFilter = null ) {
   const list = new ItemList();
   await list.reloadFromFile();
   list.addFilter( passedFilter );
-
-  let currentView = 0;
-
-  // helper functions
-  const translateSelection = selected => currentView * 10 + Number( selected ) - 1;
-
   list.drawView(); // initial rendering
 
   // let previousDataFileModified: number | null = null;
@@ -122,22 +116,17 @@ Help:
         break;
       case "o":
       case "open":
-        selected = translateSelection( selected );
         list.open( selected );
         break;
       case "a":
       case "alt":
-        selected = translateSelection( selected );
         list.altOpen( selected );
         break;
       case "d":
       case "rm":
       case "remove":
       case "delete":
-        selected = translateSelection( selected );
-        const removeEntry = list.remove( selected );
-        list.drawView();
-        console.log( `Removed ${selected + 1} (${removeEntry.desc ? removeEntry.desc : removeEntry.name})` );
+        list.remove( selected );
         break;
       case "reload":
         await list.reloadFromFile();
