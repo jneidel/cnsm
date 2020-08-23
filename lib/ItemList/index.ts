@@ -116,6 +116,11 @@ export default class ItemList {
     altOpen( item );
   }
 
+  /* random */
+  randomIndex(): number {
+    return Math.floor( Math.random() * this.get().length );
+  }
+
   /* search */
   search( query: string ): Item[] {
     const regex = new RegExp( query, "i" );
