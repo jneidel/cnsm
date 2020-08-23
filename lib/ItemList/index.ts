@@ -207,9 +207,13 @@ export default class ItemList {
     this.drawView();
   }
   private translateIndexToView( input: number ): number|null {
-    if ( input > 10 || input < 1 ) {
+    if ( input > 10 || input < 1 )
       return null;
-    }
-    return this.view * this.VIEW_RANGE + Number( input ) - 1;
+
+    const index = this.view * this.VIEW_RANGE + Number( input ) - 1;
+    if ( index >= this.get().length )
+      return null;
+    else
+      return index;
   }
 }
