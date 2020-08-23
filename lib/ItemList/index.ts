@@ -1,6 +1,8 @@
+import chalk from "chalk";
 import { readData, writeData } from "../fs";
 import { validateFilter } from "../validateFilter";
 import { dataTypes, open, altOpen } from "../types";
+import Media from "../Media";
 
 type Item = {
   name: string;
@@ -142,23 +144,54 @@ export default class ItemList {
   private view: number = 0;
   VIEW_RANGE: number = 10;
 
-  drawView(): Item[] {
+  drawView() {
     const start = ( range => range * this.VIEW_RANGE )( this.view );
     const end = ( range => ( range + 1 ) * this.VIEW_RANGE )( this.view );
-    return this.get().slice( start, end );
+    const list = this.get();
+    const currentView = list
+      .slice( start, end )
+      .map( d => new Media( d ) );
+
+    const viewStart = start + 1;
+    const viewEnd =
+      currentView.length < 10 ?
+        currentView.length == 1 ?
+          "" : // 1 item
+          `-${list.length}` : // < 10 items
+        `-${end}`; // 10 items
+
+    const filters = this.getFilters();
+    const viewFilters = filters.length ? `, ${chalk.green( "Filter:" )} ${filters}` : "";
+
+    const viewOutput: string = currentView
+      .map( ( media, index ) => media.toString( index ) )
+      .reduce(
+        ( str, cur ) => `${str}\n  ${cur}`,
+        `${chalk.green( "Entries:" )} ${viewStart}${viewEnd}${viewFilters}` );
+    console.log( viewOutput );
   }
   increaseView(): void {
     if ( this.get().length > ( this.view + 1 ) * this.VIEW_RANGE ) {
       this.view++;
+      this.drawView();
+    } else {
+      console.log( "Reached last page of entries" );
     }
-    // Todo: send feedback to user
   }
   decreaseView(): void {
     if ( this.view !== 0 ) {
       this.view--;
+      this.drawView();
+    } else {
+      console.log( "Reached first page of entries" );
     }
   }
   resetView(): void {
     this.view = 0;
+    this.drawView();
+  }
+  lastView(): void {
+    this.view = Math.floor( this.get().length / this.VIEW_RANGE );
+    this.drawView();
   }
 }

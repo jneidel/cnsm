@@ -1,7 +1,6 @@
 // import Media from "./Media";
 import readline from "readline-promise";
 import chalk from "chalk";
-import render from "./render";
 import ItemList from "./ItemList";
 import { dataTypes } from "./types";
 
@@ -13,10 +12,9 @@ export default async function view( passedFilter = null ) {
   let currentView = 0;
 
   // helper functions
-  const draw = () => render( list, currentView );
   const translateSelection = selected => currentView * 10 + Number( selected ) - 1;
 
-  draw(); // initial rendering
+  list.drawView(); // initial rendering
 
   // let previousDataFileModified: number | null = null;
   // ( function reloadOnFileChange() {
@@ -29,7 +27,7 @@ export default async function view( passedFilter = null ) {
   //     ) {
   //       await list.setFromConfig();
   //       list = list.filter( filters );
-  //       draw();
+  //       list.drawView();
   //       process.stdout.write( `Automatic reload (data file changed in background)
 // ${chalk.blue( "$ " )}` );
   //     }
@@ -56,26 +54,17 @@ export default async function view( passedFilter = null ) {
       case "list":
       case "ls":
       case "l":
-        draw();
+        list.drawView();
         break;
       case "next":
       case "n":
-        if ( list.get().length >= ( currentView + 1 ) * 10 ) {
-          currentView += 1;
-          draw();
-        } else
-          console.log( "Reached last page of entries" );
+        list.increaseView();
         break;
       case "previous":
       case "prev":
       case "..":
       case "p":
-        if ( currentView === 0 )
-          console.log( "Reached first page of entries" );
-        else {
-          currentView -= 1;
-          draw();
-        }
+        list.decreaseView();
         break;
       case "exit":
         process.exit();
@@ -124,13 +113,12 @@ Help:
       case "f":
       case "filter":
         list.addFilter( selected );
-        currentView = 0;
-        draw();
+        list.resetView();
         break;
       case "re":
       case "reset":
         list.clearFilters();
-        draw();
+        list.drawView();
         break;
       case "o":
       case "open":
@@ -148,23 +136,20 @@ Help:
       case "delete":
         selected = translateSelection( selected );
         const removeEntry = list.remove( selected );
-        draw();
+        list.drawView();
         console.log( `Removed ${selected + 1} (${removeEntry.desc ? removeEntry.desc : removeEntry.name})` );
         break;
       case "reload":
         await list.reloadFromFile();
-        draw();
+        list.drawView();
         console.log( "Reloaded data file" );
         break;
       case "gg":
-        currentView = 0;
-        draw();
+        list.resetView();
         console.log( "Back to first page" );
         break;
       case "G":
-        const lastView = Math.floor( list.get().length / 10 );
-        currentView = lastView;
-        draw();
+        list.lastView();
         console.log( "Switched to last page of entries" );
         break;
       case "types":
