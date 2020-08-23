@@ -108,6 +108,9 @@ export default async function view( passedFilter = null ) {
         list.lastView();
         console.log( "Switched to last page of entries" );
         break;
+      case "rand":
+        list.randomEntry();
+        break;
       case "types":
         console.log( "Available data types for filtering:" );
         console.log( dataTypes.sort() );
@@ -127,6 +130,7 @@ ${chalk.blue( "Filtering:" ) }
                either with the full type, or shorthand
                examples: $ f books; f b; f b,mv
   re, reset  - reset filters
+      rand   - select a random entry
 
 ${chalk.blue( "Handler/openers (open with a handler defined by type):" ) }
   o,  open   - open with default handler

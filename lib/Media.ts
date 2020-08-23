@@ -4,14 +4,16 @@ import * as types from "./types";
 export default class Media {
   name: string;
   medium: string;
-  desc = "";
+  desc: string;
+  isSelected : boolean;
 
   // constructor( data: MediaData ) {
   constructor( data ) {
     this.name = data.name;
     this.medium = data.medium;
 
-    this.desc = data.desc ? data.desc : this.desc;
+    this.desc = data.desc ? data.desc : "";
+    this.isSelected = data.isSelected ? true : false;
   }
 
   translateType() {
@@ -19,7 +21,10 @@ export default class Media {
   }
   private evalDescriptor() {
     const item = { medium: this.medium, desc: this.desc, name: this.name };
-    return types.evalItemName( item );
+    if ( this.isSelected )
+      return chalk.black.bgYellow( types.evalItemName( item ) );
+    else
+      return types.evalItemName( item );
   }
 
   toString( index = 0 ) {

@@ -130,11 +130,6 @@ export default class ItemList {
     this.opener( index, altOpen );
   }
 
-  /* random */
-  randomIndex(): number {
-    return Math.floor( Math.random() * this.get().length );
-  }
-
   /* search */
   search( query: string ): Item[] {
     const regex = new RegExp( query, "i" );
@@ -152,14 +147,32 @@ export default class ItemList {
     return matches;
   }
 
+  /* random */
+  randomEntry() {
+    this.drawView( { isRandom: true } );
+  }
+  private genRandomIndex( list: Item[] ): number {
+    const n = Math.floor( Math.random() * list.length );
+
+    this.view = Math.floor( n / this.VIEW_RANGE );
+
+    return n;
+  }
+
   /* views */
   private view: number = 0;
   VIEW_RANGE: number = 10;
 
-  drawView() {
+  drawView( options: any = {} ) {
+    const list: any = this.get();
+
+    if ( options.isRandom ) {
+      const randomIndex = this.genRandomIndex( list );
+      list[randomIndex].isSelected = true;
+    }
+
     const start = ( range => range * this.VIEW_RANGE )( this.view );
     const end = ( range => ( range + 1 ) * this.VIEW_RANGE )( this.view );
-    const list = this.get();
     const currentView = list
       .slice( start, end )
       .map( d => new Media( d ) );
