@@ -71,39 +71,6 @@ export default async function view( passedFilter = null ) {
         list.write();
         // previousDataFileModified = await fs.getDataFileModified();
         break;
-      case "help":
-        console.log( `${chalk.green( "Available commands:" )}
-  ls, list   - list entries
-
-Moving around:
-  n,  next   - view next 10 entries
-  p,  prev   - view previous 10 entries
-  gg         - goto first page of entries
-  G          - goto last page of entries
-
-Filtering:
-  f,  filter - filter by type
-               either with the full type, or shorthand
-               examples: $ f books; f b; f b,mv
-  re, reset  - reset filters
-
-Handler/openers (open with a handler defined by type):
-  o,  open   - open with default handler
-               example: manga searches on mangalife.us
-  a,  alt    - open with alternative handler
-               example: movie searches on imdb.com
-
-Saving/exiting:
-      reload - reload from file (disregarding all changes)
-  w,  write  - write changes
-  q,  wq     - write changes and quit
-      exit   - exit without writing
-
-Help:
-      help   - this menu
-      types  - list all available types
-` );
-        break;
       case "f":
       case "filter":
         list.addFilter( selected );
@@ -144,6 +111,39 @@ Help:
       case "types":
         console.log( "Available data types for filtering:" );
         console.log( dataTypes.sort() );
+        break;
+      case "help":
+        console.log( `${chalk.green( "Available commands:" )}
+  ls, list   - list entries
+
+${chalk.blue( "Moving around:" ) }
+  n,  next   - view next 10 entries
+  p,  prev   - view previous 10 entries
+  gg         - goto first page of entries
+  G          - goto last page of entries
+
+${chalk.blue( "Filtering:" ) }
+  f,  filter - filter by type
+               either with the full type, or shorthand
+               examples: $ f books; f b; f b,mv
+  re, reset  - reset filters
+
+${chalk.blue( "Handler/openers (open with a handler defined by type):" ) }
+  o,  open   - open with default handler
+               example: manga searches on mangalife.us
+  a,  alt    - open with alternative handler
+               example: movie searches on imdb.com
+
+${chalk.blue( "Saving/exiting:" ) }
+      reload - reload from file (disregarding all changes)
+  w,  write  - write changes
+  q,  wq     - write changes and quit
+      exit   - exit without writing
+
+${chalk.blue( "Help:" ) }
+      help   - this menu
+      types  - list all available types
+` );
         break;
     }
   }
