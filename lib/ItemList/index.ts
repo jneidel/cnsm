@@ -166,8 +166,9 @@ export default class ItemList {
   drawView( options: any = {} ) {
     const list: any = this.get();
 
+    let randomIndex;
     if ( options.isRandom ) {
-      const randomIndex = this.genRandomIndex( list );
+      randomIndex = this.genRandomIndex( list );
       list[randomIndex].isSelected = true;
     }
 
@@ -194,6 +195,9 @@ export default class ItemList {
         ( str, cur ) => `${str}\n  ${cur}`,
         `${chalk.green( "Entries:" )} ${viewStart}${viewEnd}${viewFilters}` );
     console.log( viewOutput );
+
+    if ( options.isRandom )
+      delete list[randomIndex].isSelected;
   }
   increaseView(): void {
     if ( this.get().length > ( this.view + 1 ) * this.VIEW_RANGE ) {
