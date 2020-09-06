@@ -12,7 +12,8 @@ export default async function list( unvalidatedFilter = null ) {
       if ( d.desc )
         res = `${res}: ${d.desc}`;
 
-      if ( list.getFilters().length )
+      const filtersLen = list.getFilters().length;
+      if ( !filtersLen || filtersLen > 1 )
         res = `${res} [${d.medium}]`;
 
       return res;
