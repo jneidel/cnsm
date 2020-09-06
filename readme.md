@@ -17,6 +17,8 @@ See `--help` and in view mode `help`.
 
 [See examples](example_config)
 
+[See author's `types.json`](https://jneidel.com/dot/.config/cnsm/types.json)
+
 ### Types
 
 Configured in `~/.config/cnsm/types.json` as:
