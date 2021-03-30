@@ -11,7 +11,7 @@ async function main() {
     `$ cnsm
 
 Usage
-  cnsm             - view list (try 'help' for usage)
+  cnsm             - view mode (try 'help' for usage)
   cnsm add <name>  - add to list
   cnsm list        - list all items
 
